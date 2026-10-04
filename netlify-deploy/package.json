@@ -1,0 +1,24 @@
+{
+  "name": "ubasaka-kaew-registration-2569",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "ระบบลงทะเบียนโครงการอบรมอุบาสกอุบาสิกาแก้ว ปี 2569",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "node -e \"console.log('Static site ready')\"",
+    "prepare-deploy": "node scripts/prepare-deploy.mjs",
+    "deploy": "netlify deploy --prod",
+    "setup-platform-sheet": "node scripts/setup-platform-sheet.mjs",
+    "fix-session-headers": "node scripts/fix-session-headers.mjs",
+    "migrate-to-master": "node scripts/migrate-to-master.mjs"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "googleapis": "^144.0.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.37.2"
+  }
+}

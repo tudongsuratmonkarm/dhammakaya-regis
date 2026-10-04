@@ -1,0 +1,955 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102a43">
+  <title>ธุดงคสถานสุราษฎร์ธานี | ศูนย์รวมข้อมูล ข่าวสาร โครงการ และงานบุญกฐิน</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #102a43;
+      --navy-2: #1e4d6b;
+      --gold: #c89b3c;
+      --gold-light: #f7e5b8;
+      --cream: #fbf8f1;
+      --ink: #243b53;
+    }
+    body {
+      background-color: var(--cream);
+      color: var(--ink);
+      font-family: 'Noto Sans Thai', system-ui, sans-serif;
+    }
+    .home-hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+      color: white;
+      padding: 4.5rem 0 3.5rem;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 3px solid var(--gold);
+    }
+    .home-hero::before {
+      content: "☸";
+      position: absolute;
+      right: -3rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 26rem;
+      opacity: 0.04;
+      line-height: 1;
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(200, 155, 60, 0.2);
+      border: 1px solid var(--gold);
+      color: var(--gold-light);
+      padding: 0.35rem 1rem;
+      border-radius: 2rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .home-hero h1 {
+      font-size: clamp(2rem, 5.5vw, 3.4rem);
+      font-weight: 700;
+      line-height: 1.25;
+      color: #ffffff;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .home-hero .subtitle {
+      font-size: clamp(1.1rem, 2.8vw, 1.45rem);
+      color: var(--gold-light);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .home-hero p.lead-desc {
+      opacity: 0.9;
+      font-size: 1.05rem;
+      max-width: 720px;
+      line-height: 1.6;
+    }
+    .hero-btn {
+      padding: 0.75rem 1.65rem;
+      font-weight: 600;
+      font-size: 1.02rem;
+      border-radius: 0.65rem;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+    .hero-btn-gold {
+      background: var(--gold);
+      color: var(--navy);
+      border: 1px solid var(--gold);
+      box-shadow: 0 4px 14px rgba(200, 155, 60, 0.35);
+    }
+    .hero-btn-gold:hover {
+      background: #b58930;
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+    .hero-btn-outline {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      border: 1.5px solid rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(4px);
+    }
+    .hero-btn-outline:hover {
+      background: #ffffff;
+      color: var(--navy);
+      border-color: #ffffff;
+      transform: translateY(-2px);
+    }
+    .home-section {
+      padding: 3rem 0;
+      border-bottom: 1px solid #ebdcc5;
+    }
+    .home-section:last-of-type {
+      border-bottom: none;
+    }
+    .section-header {
+      margin-bottom: 1.75rem;
+    }
+    .section-eyebrow {
+      color: #a57618;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 0;
+    }
+    .section-subtitle {
+      color: #627d98;
+      font-size: 0.95rem;
+      margin-top: 0.2rem;
+    }
+
+    /* Announcements */
+    .announcement-card {
+      background: #ffffff;
+      border: 1px solid #ebdcc5;
+      border-left: 4px solid #b42318;
+      border-radius: 0.75rem;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 2px 8px rgba(16,42,67,0.04);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .announcement-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(16,42,67,0.08);
+    }
+
+    /* Open Projects & Session Capacity Grid */
+    .project-block {
+      background: #ffffff;
+      border: 1px solid #ebdcc5;
+      border-radius: 1rem;
+      padding: 1.75rem;
+      box-shadow: 0 4px 16px rgba(16,42,67,0.05);
+      margin-bottom: 1.5rem;
+    }
+    .session-badge-card {
+      background: #fbf8f1;
+      border: 1.5px solid #d9e2ec;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+    .session-badge-card:hover {
+      border-color: var(--navy);
+      background: #f0f7ff;
+      transform: translateY(-2px);
+    }
+    .session-badge-card.is-full {
+      border-color: #fca5a5;
+      background: #fff5f5;
+    }
+    .session-badge-card.is-near-full {
+      border-color: #fcd34d;
+      background: #fffdf5;
+    }
+
+    /* Stat Cards */
+    .stat-hero-card {
+      background: #ffffff;
+      border: 1px solid #ebdcc5;
+      border-radius: 1rem;
+      padding: 1.75rem 1.25rem;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(16,42,67,0.05);
+      transition: transform 0.2s;
+    }
+    .stat-hero-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(16,42,67,0.09);
+    }
+    .stat-hero-card .num {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1;
+    }
+    .stat-hero-card .lbl {
+      color: #627d98;
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-top: 0.5rem;
+    }
+
+    /* Kathin Card */
+    .kathin-card {
+      background: #ffffff;
+      border: 1px solid #ebdcc5;
+      border-radius: 0.85rem;
+      padding: 1.15rem 1.25rem;
+      box-shadow: 0 2px 8px rgba(16,42,67,0.04);
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+    .kathin-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(16,42,67,0.08);
+      border-color: var(--gold);
+    }
+
+    /* Events Timeline Card */
+    .event-card {
+      background: #ffffff;
+      border: 1px solid #ebdcc5;
+      border-radius: 0.85rem;
+      padding: 1.25rem;
+      box-shadow: 0 2px 8px rgba(16,42,67,0.04);
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+      transition: all 0.2s ease;
+    }
+    .event-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(16,42,67,0.08);
+    }
+    .event-date-box {
+      background: #f0f7ff;
+      border: 1px solid #cbd5df;
+      color: var(--navy);
+      padding: 0.65rem 0.85rem;
+      border-radius: 0.5rem;
+      text-align: center;
+      min-width: 90px;
+      flex-shrink: 0;
+    }
+
+    /* Contact Card */
+    .contact-card {
+      background: #ffffff;
+      border: 1px solid #ebdcc5;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 4px 16px rgba(16,42,67,0.05);
+    }
+
+    /* Quick Links */
+    .quick-link-btn {
+      background: #ffffff;
+      border: 1.5px solid #ebdcc5;
+      border-radius: 0.75rem;
+      padding: 0.85rem 1.5rem;
+      color: var(--navy);
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      font-size: 0.95rem;
+    }
+    .quick-link-btn:hover {
+      background: #f4ede0;
+      border-color: var(--gold);
+      color: var(--navy);
+      transform: translateY(-2px);
+    }
+    .quick-link-btn.primary-btn {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: #ffffff;
+    }
+    .quick-link-btn.primary-btn:hover {
+      background: #0b1f33;
+      color: #ffffff;
+    }
+
+    .skeleton {
+      background: #ede8df;
+      border-radius: 0.5rem;
+      animation: shimmer 1.5s infinite;
+    }
+    @keyframes shimmer {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Site Navigation -->
+  <header class="site-header">
+    <div class="container d-flex align-items-center justify-content-between gap-3 py-3">
+      <a href="index.html" class="brand text-decoration-none">
+        <span class="brand-mark fs-2">☸</span>
+        <div>
+          <span class="fw-bold text-navy" style="font-size: 1.05rem; line-height: 1.2; display: block;">ธุดงคสถานสุราษฎร์ธานี</span>
+          <small class="text-muted" style="font-size: 0.78rem;">ศูนย์รวมข้อมูล โครงการ และงานบุญกฐิน</small>
+        </div>
+      </a>
+      <nav aria-label="เมนูหลัก" class="d-flex gap-2 flex-wrap align-items-center">
+        <a class="nav-link fw-bold active" href="index.html" aria-current="page">หน้าแรก</a>
+        <a class="nav-link" href="register.html">ลงทะเบียนโครงการ</a>
+        <a class="nav-link" href="kathin.html">ข้อมูลงานกฐิน</a>
+        <a class="btn btn-outline-secondary btn-sm ms-2" href="admin.html">เข้าสู่ระบบผู้ดูแล</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Dynamic Homepage Content Rendered via CMS Config -->
+  <main id="homepage-content">
+    <!-- Initial Loading Skeleton -->
+    <section class="home-hero">
+      <div class="container">
+        <div class="row"><div class="col-lg-8">
+          <div class="skeleton mb-3" style="height:2rem; width:140px; border-radius:2rem;"></div>
+          <div class="skeleton mb-2" style="height:3.5rem; width:80%;"></div>
+          <div class="skeleton mb-4" style="height:1.5rem; width:60%;"></div>
+          <div class="d-flex gap-3">
+            <div class="skeleton" style="height:3rem; width:180px; border-radius:.65rem;"></div>
+            <div class="skeleton" style="height:3rem; width:140px; border-radius:.65rem;"></div>
+          </div>
+        </div></div>
+      </div>
+    </section>
+
+    <div class="container py-5 text-center text-muted">
+      <div class="spinner-border text-primary me-2" role="status"></div>
+      <span>กำลังโหลดข้อมูลหน้าแรก...</span>
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer mt-0 py-4">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center gap-3">
+      <div>
+        <strong class="text-white">ธุดงคสถานสุราษฎร์ธานี</strong>
+        <p class="text-muted small mb-0">ศูนย์รวมข้อมูลข่าวสาร โครงการอบรม และงานบุญทอดกฐินประจำปี</p>
+      </div>
+      <div class="text-end small">
+        <div class="mb-1">
+          <a href="register.html" class="text-decoration-none text-light opacity-75 me-3">ลงทะเบียน</a>
+          <a href="kathin.html" class="text-decoration-none text-light opacity-75 me-3">ข้อมูลกฐิน</a>
+          <a href="admin.html" class="text-decoration-none text-light opacity-75">Admin Panel</a>
+        </div>
+        <span class="opacity-50">© 2569 ธุดงคสถานสุราษฎร์ธานี. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module">
+    const esc = v => String(v ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'})[c]);
+    const thaiM = ['','ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+    const fmtD = d => {
+      if (!d) return '';
+      try {
+        const parts = String(d).split(/[-/]/);
+        if (parts.length === 3) {
+          let [y, m, day] = parts;
+          if (y.length === 4) return `${+day} ${thaiM[+m] || m} ${+y > 2400 ? +y : +y + 543}`;
+          return `${parts[0]}/${parts[1]}/${parts[2]}`;
+        }
+        return d;
+      } catch { return d; }
+    };
+
+    // Default configuration if not yet customized in Admin
+    const DEFAULT_CONFIG = {
+      sections: [
+        { id: 'hero', name: 'Banner / หัวเว็บ', enabled: true },
+        { id: 'announcements', name: 'ข่าว / ประกาศสำคัญ', enabled: true },
+        { id: 'projects', name: 'โครงการที่กำลังเปิดรับสมัคร', enabled: true },
+        { id: 'stats', name: 'ข้อมูลภาพรวม', enabled: true },
+        { id: 'kathin', name: 'กฐินแสน / กฐินหมื่น', enabled: true },
+        { id: 'events', name: 'ตารางกิจกรรม / อบรมที่กำลังจะมาถึง', enabled: true },
+        { id: 'contact', name: 'ติดต่อธุดงคสถานสุราษฎร์ธานี', enabled: true },
+        { id: 'quicklinks', name: 'ปุ่มลัด / เมนูลัด', enabled: true }
+      ],
+      hero: {
+        badge: 'แพลตฟอร์มข้อมูลกลาง',
+        title: 'ธุดงคสถานสุราษฎร์ธานี',
+        subtitle: 'ข้อมูลข่าวสาร • โครงการ • กิจกรรม',
+        description: 'ศูนย์รวมข้อมูลโครงการอบรม ปฏิบัติธรรม และงานบุญทอดกฐินประจำปีของธุดงคสถานสุราษฎร์ธานี เพื่อความเจริญรุ่งเรืองแห่งพระพุทธศาสนา',
+        primaryBtnText: '📝 ลงทะเบียนโครงการ',
+        primaryBtnLink: 'register.html',
+        saenBtnText: '🌟 กฐินแสน',
+        saenBtnLink: 'kathin.html?type=กฐินแสน',
+        muenBtnText: '🎆 กฐินหมื่น',
+        muenBtnLink: 'kathin.html?type=กฐินหมื่น'
+      },
+      announcements: [
+        {
+          id: 'ann-1',
+          title: 'เปิดรับสมัครอบรมอุบาสกอุบาสิกาแก้ว ประจำปี 2569',
+          badge: '📢 ประกาศสำคัญ',
+          badgeColor: 'danger',
+          date: '1 ต.ค. 2569',
+          content: 'ขอเชิญชวนผู้มีจิตศรัทธาเข้าร่วมโครงการอบรม ณ ธุดงคสถานสุราษฎร์ธานี เพื่อปฏิบัติธรรมและสั่งสมบุญบารมี สามารถลงทะเบียนออนไลน์ได้แล้ววันนี้',
+          link: 'register.html',
+          linkText: 'ลงทะเบียนออนไลน์ →'
+        },
+        {
+          id: 'ann-2',
+          title: 'กำหนดการพิธีทอดกฐินสามัคคี ประจำปี 2569 (กฐินแสน / กฐินหมื่น)',
+          badge: '🙏 งานบุญกฐิน',
+          badgeColor: 'warning',
+          date: '2 ต.ค. 2569',
+          content: 'ตรวจสอบรายชื่อวัด กำหนดวันและเวลาทอดกฐินของวัดในสังกัดโครงการกฐินแสนและกฐินหมื่น ประจำปี 2569 ได้ทางหน้าเว็บไซต์',
+          link: 'kathin.html',
+          linkText: 'ดูรายชื่อวัดทอดกฐินทั้งหมด →'
+        }
+      ],
+      stats: {
+        mode: 'auto',
+        customPersons: 1245,
+        customTemples: 326,
+        customProjects: 3,
+        title: '📊 ข้อมูลภาพรวม',
+        subtitle: 'สถิติการดำเนินงานและเครือข่ายงานบุญ'
+      },
+      events: [
+        {
+          id: 'evt-1',
+          title: 'พิธีสวดมนต์ปฏิบัติธรรมประจำสัปดาห์',
+          date: 'ทุกวันพระ และวันอาทิตย์',
+          time: '09:00 - 11:30 น.',
+          location: 'ศาลาปฏิบัติธรรม ธุดงคสถานสุราษฎร์ธานี',
+          description: 'สวดมนต์ทำวัตรเช้า ปฏิบัติธรรมเจริญสมาธิภาวนา และรับฟังพระธรรมเทศนา'
+        },
+        {
+          id: 'evt-2',
+          title: 'โครงการอบรมอุบาสกอุบาสิกาแก้ว รุ่นที่ 1',
+          date: '4 - 6 ก.ย. 2569',
+          time: '3 วัน 2 คืน',
+          location: 'ธุดงคสถานสุราษฎร์ธานี',
+          description: 'อบรมพัฒนาจิตใจ เรียนรู้หลักธรรมและฝึกฝนตนเอง'
+        },
+        {
+          id: 'evt-3',
+          title: 'พิธีทอดกฐินสามัคคี ประจำปี 2569',
+          date: 'ช่วงเทศกาลกฐิน 2569',
+          time: '09:30 น. เป็นต้นไป',
+          location: 'ธุดงคสถานสุราษฎร์ธานี',
+          description: 'ร่วมบุญทอดกฐินสามัคคีเพื่อทำนุบำรุงพระพุทธศาสนา'
+        }
+      ],
+      contact: {
+        title: 'ติดต่อธุดงคสถานสุราษฎร์ธานี',
+        subtitle: 'ร่วมบุญ สอบถามข้อมูลโครงการ หรือแจ้งข้อมูลวัด',
+        address: 'ธุดงคสถานสุราษฎร์ธานี ตำบลบางใหญ่ อำเภอเมือง จังหวัดสุราษฎร์ธานี 84000',
+        phone: '077-xxx-xxx, 081-xxx-xxxx',
+        lineId: '@thudongsurat',
+        facebook: 'ธุดงคสถานสุราษฎร์ธานี',
+        openHours: 'เปิดทำการทุกวัน เวลา 08:00 – 17:00 น.'
+      }
+    };
+
+    async function initHomepage() {
+      let config = DEFAULT_CONFIG;
+      let projects = [];
+      let sessions = [];
+      let temples = [];
+      let kathins = [];
+      let apiStats = {};
+
+      try {
+        const [confRes, kathinRes] = await Promise.all([
+          fetch('/.netlify/functions/config').then(r => r.json()).catch(() => ({})),
+          fetch('/.netlify/functions/public-kathin').then(r => r.json()).catch(() => ({}))
+        ]);
+
+        const cData = confRes.data || confRes;
+        projects = cData.projects || [];
+        sessions = cData.sessions || [];
+        temples = cData.temples || [];
+        apiStats = cData.stats || {};
+        kathins = kathinRes.data?.kathins || kathinRes.kathins || [];
+
+        if (cData.homepageConfig && cData.homepageConfig.sections) {
+          const hp = cData.homepageConfig;
+          config = {
+            ...DEFAULT_CONFIG,
+            ...hp,
+            sections: (Array.isArray(hp.sections) && hp.sections.length) ? hp.sections : DEFAULT_CONFIG.sections,
+            hero: { ...DEFAULT_CONFIG.hero, ...(hp.hero || {}) },
+            announcements: (Array.isArray(hp.announcements) && hp.announcements.length) ? hp.announcements : DEFAULT_CONFIG.announcements,
+            stats: { ...DEFAULT_CONFIG.stats, ...(hp.stats || {}) },
+            events: (Array.isArray(hp.events) && hp.events.length) ? hp.events : DEFAULT_CONFIG.events,
+            contact: { ...DEFAULT_CONFIG.contact, ...(hp.contact || {}) }
+          };
+        }
+      } catch (err) {
+        console.warn('Using fallback homepage config:', err);
+      }
+
+      renderPage(config, { projects, sessions, temples, kathins, apiStats });
+    }
+
+    function renderPage(cfg, data) {
+      const container = document.getElementById('homepage-content');
+      if (!container) return;
+
+      const sections = cfg.sections || DEFAULT_CONFIG.sections;
+      const htmlParts = [];
+
+      sections.forEach(sec => {
+        if (sec.enabled === false) return; // Admin turned off this section
+
+        if (sec.id === 'hero') {
+          htmlParts.push(renderHeroSection(cfg.hero || DEFAULT_CONFIG.hero));
+        } else if (sec.id === 'announcements') {
+          htmlParts.push(renderAnnouncementsSection(cfg.announcements || DEFAULT_CONFIG.announcements));
+        } else if (sec.id === 'projects') {
+          htmlParts.push(renderProjectsSection(data.projects, data.sessions));
+        } else if (sec.id === 'stats') {
+          htmlParts.push(renderStatsSection(cfg.stats || DEFAULT_CONFIG.stats, data.apiStats, data));
+        } else if (sec.id === 'kathin') {
+          htmlParts.push(renderKathinSection(data.kathins));
+        } else if (sec.id === 'events') {
+          htmlParts.push(renderEventsSection(cfg.events || DEFAULT_CONFIG.events));
+        } else if (sec.id === 'contact') {
+          htmlParts.push(renderContactSection(cfg.contact || DEFAULT_CONFIG.contact));
+        } else if (sec.id === 'quicklinks') {
+          htmlParts.push(renderQuicklinksSection());
+        }
+      });
+
+      container.innerHTML = htmlParts.join('');
+
+      // Wire interactive tabs for kathin section if present
+      wireKathinTabs(data.kathins);
+    }
+
+    /* Section Renderers */
+
+    function renderHeroSection(hero) {
+      return `
+        <section class="home-hero" aria-labelledby="site-title">
+          <div class="container">
+            <div class="row"><div class="col-lg-9 col-xl-8">
+              ${hero.badge ? `<div class="hero-badge mb-3">${esc(hero.badge)}</div>` : ''}
+              <h1 id="site-title">${esc(hero.title || 'ธุดงคสถานสุราษฎร์ธานี')}</h1>
+              <div class="subtitle mb-3">${esc(hero.subtitle || 'ข้อมูลข่าวสาร • โครงการ • กิจกรรม')}</div>
+              <p class="lead-desc mb-4">${esc(hero.description || '')}</p>
+              
+              <!-- Quick Action Buttons -->
+              <div class="d-flex flex-wrap gap-3">
+                <a href="${esc(hero.primaryBtnLink || 'register.html')}" class="hero-btn hero-btn-gold">
+                  ${esc(hero.primaryBtnText || '📝 ลงทะเบียนโครงการ')}
+                </a>
+                <a href="${esc(hero.saenBtnLink || 'kathin.html?type=กฐินแสน')}" class="hero-btn hero-btn-outline">
+                  ${esc(hero.saenBtnText || '🌟 กฐินแสน')}
+                </a>
+                <a href="${esc(hero.muenBtnLink || 'kathin.html?type=กฐินหมื่น')}" class="hero-btn hero-btn-outline">
+                  ${esc(hero.muenBtnText || '🎆 กฐินหมื่น')}
+                </a>
+              </div>
+            </div></div>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderAnnouncementsSection(announcements) {
+      if (!announcements || !announcements.length) return '';
+      return `
+        <section class="home-section" aria-label="ข่าวและประกาศสำคัญ">
+          <div class="container">
+            <div class="section-header">
+              <p class="section-eyebrow">ข่าวประชาสัมพันธ์</p>
+              <h2 class="section-title">📢 ข่าว / ประกาศสำคัญ</h2>
+            </div>
+            <div class="row g-3">
+              ${announcements.map(a => `
+                <div class="col-12 col-md-6">
+                  <div class="announcement-card h-100 d-flex flex-direction-column justify-content-between">
+                    <div>
+                      <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="badge bg-${esc(a.badgeColor || 'danger')}">${esc(a.badge || 'ประกาศสำคัญ')}</span>
+                        <small class="text-muted font-monospace">${esc(a.date || '')}</small>
+                      </div>
+                      <h3 class="h5 fw-bold text-navy mb-2">${esc(a.title)}</h3>
+                      <p class="text-secondary small mb-3">${esc(a.content)}</p>
+                    </div>
+                    ${a.link ? `<div><a href="${esc(a.link)}" class="btn btn-sm btn-outline-danger fw-semibold">${esc(a.linkText || 'อ่านรายละเอียด →')}</a></div>` : ''}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderProjectsSection(projects, sessions) {
+      const openProjects = (projects || []).filter(p => (p.status || 'OPEN').toUpperCase() === 'OPEN' || String(p.publicVisible).toUpperCase() === 'TRUE');
+      
+      return `
+        <section class="home-section" aria-label="โครงการที่กำลังเปิดรับสมัคร">
+          <div class="container">
+            <div class="d-flex justify-content-between align-items-end section-header">
+              <div>
+                <p class="section-eyebrow">งานอบรมและกิจกรรมธรรมะ</p>
+                <h2 class="section-title">📅 โครงการที่กำลังเปิดรับสมัคร</h2>
+                <div class="section-subtitle">เลือกโครงการและรอบที่สะดวกเพื่อลงทะเบียนเข้าร่วม</div>
+              </div>
+              <a href="register.html" class="btn btn-outline-primary btn-sm d-none d-md-inline-block">ดูทั้งหมด →</a>
+            </div>
+
+            ${openProjects.length ? openProjects.map(p => {
+              const pSessions = (sessions || []).filter(s => s.projectId === p.projectId);
+              return `
+                <div class="project-block">
+                  <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
+                    <div>
+                      <span class="badge bg-success-subtle text-success border border-success-subtle mb-1">เปิดรับสมัคร</span>
+                      <h3 class="h4 fw-bold text-navy mb-1">${esc(p.projectName)}</h3>
+                      <p class="text-muted small mb-0">${esc(p.description || 'โครงการฝึกอบรมเพื่อพัฒนาคุณธรรมและจิตใจ ณ ธุดงคสถานสุราษฎร์ธานี')}</p>
+                    </div>
+                    <a href="register.html?projectId=${esc(p.projectId)}" class="btn btn-warning fw-bold px-3 py-2">ลงทะเบียนเข้าร่วม →</a>
+                  </div>
+
+                  <!-- Session Capacity Grid (Card Boxes) -->
+                  <div class="row g-3">
+                    ${pSessions.length ? pSessions.map(s => {
+                      const count = Number(s.count) || 0;
+                      const cap = Number(s.capacity) || 0;
+                      const pct = cap > 0 ? Math.min(100, Math.round((count / cap) * 100)) : 0;
+                      
+                      let badge = '<span class="badge bg-success">🟢 เปิดรับ</span>';
+                      let cardClass = '';
+                      let barColor = 'bg-success';
+                      if (cap > 0 && count >= cap) {
+                        badge = '<span class="badge bg-danger">🔴 เต็มแล้ว</span>';
+                        cardClass = 'is-full';
+                        barColor = 'bg-danger';
+                      } else if (cap > 0 && pct >= 80) {
+                        badge = '<span class="badge bg-warning text-dark">🟠 ใกล้เต็ม</span>';
+                        cardClass = 'is-near-full';
+                        barColor = 'bg-warning';
+                      }
+
+                      return `
+                        <div class="col-12 col-sm-6 col-md-4">
+                          <div class="session-badge-card ${cardClass}">
+                            <div>
+                              <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong class="text-navy">${esc(s.sessionLabel)}</strong>
+                                ${badge}
+                              </div>
+                              <div class="d-flex justify-content-between align-items-baseline mb-1">
+                                <span class="small text-muted">จำนวนผู้สมัคร:</span>
+                                <span class="fw-bold font-monospace ${cap > 0 && count >= cap ? 'text-danger' : 'text-navy'}">
+                                  ${count} / ${cap || '∞'} คน
+                                </span>
+                              </div>
+                              <div class="progress mb-2" style="height: 6px;">
+                                <div class="progress-bar ${barColor}" style="width: ${pct}%"></div>
+                              </div>
+                            </div>
+                            <div class="small text-muted border-top pt-2 mt-2 d-flex justify-content-between align-items-center">
+                              <span>📅 ${esc(s.displayDate || 'ตามกำหนดการ')}</span>
+                              <small class="text-primary">${pct}%</small>
+                            </div>
+                          </div>
+                        </div>
+                      `;
+                    }).join('') : '<div class="col-12 text-muted small p-2">ยังไม่มีรอบเปิดรับในขณะนี้</div>'}
+                  </div>
+                </div>
+              `;
+            }).join('') : `
+              <div class="card p-5 text-center text-muted border-0 shadow-sm">
+                <div class="fs-1 mb-2">📋</div>
+                <h3 class="h5">ยังไม่มีโครงการที่เปิดรับสมัครในขณะนี้</h3>
+                <p class="small mb-0">โปรดติดตามข่าวสารและกำหนดการจัดกิจกรรมได้เร็ว ๆ นี้</p>
+              </div>
+            `}
+          </div>
+        </section>
+      `;
+    }
+
+    function renderStatsSection(statsCfg, apiStats, fullData) {
+      let personsCount = statsCfg.mode === 'custom' ? (statsCfg.customPersons || 1245) : (apiStats.totalPersons || (fullData.sessions?.reduce((s,b)=>s+(Number(b.count)||0),0)) || 0);
+      let templesCount = statsCfg.mode === 'custom' ? (statsCfg.customTemples || 326) : (apiStats.totalTemples || fullData.temples?.length || 0);
+      let projectsCount = statsCfg.mode === 'custom' ? (statsCfg.customProjects || 3) : (apiStats.openProjectsCount || fullData.projects?.filter(p=>(p.status||'OPEN').toUpperCase()==='OPEN').length || 0);
+
+      // Format thousands
+      const fNum = n => Number(n).toLocaleString('th-TH');
+
+      return `
+        <section class="home-section" aria-label="ข้อมูลภาพรวม">
+          <div class="container">
+            <div class="text-center section-header">
+              <p class="section-eyebrow">สถิติและเครือข่าย</p>
+              <h2 class="section-title">${esc(statsCfg.title || '📊 ข้อมูลภาพรวม')}</h2>
+              <div class="section-subtitle">${esc(statsCfg.subtitle || 'สถิติการดำเนินงานและเครือข่ายงานบุญ')}</div>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+              <div class="col-12 col-md-4">
+                <div class="stat-hero-card">
+                  <div class="fs-2 mb-2">👥</div>
+                  <div class="num">${fNum(personsCount)}</div>
+                  <div class="lbl">บุคคลในระบบ</div>
+                  <small class="text-muted d-block mt-1">ผู้ลงทะเบียนและร่วมปฏิบัติธรรม</small>
+                </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="stat-hero-card">
+                  <div class="fs-2 mb-2">🏛️</div>
+                  <div class="num">${fNum(templesCount)}</div>
+                  <div class="lbl">วัดในเครือข่าย</div>
+                  <small class="text-muted d-block mt-1">วัดที่เข้าร่วมโครงการและรับกฐิน</small>
+                </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="stat-hero-card">
+                  <div class="fs-2 mb-2">📁</div>
+                  <div class="num">${fNum(projectsCount)}</div>
+                  <div class="lbl">โครงการที่เปิดรับ</div>
+                  <small class="text-muted d-block mt-1">หลักสูตรอบรมและกิจกรรมปัจจุบัน</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function hasKathinLeader(k) {
+      if (!k) return false;
+      const desc = String(k.description || '');
+      const status = String(k.status || '');
+      const text = `${desc} ${status}`;
+      if (/ไม่มีประธาน|ยังไม่มีประธาน/i.test(text)) return false;
+      return /มีประธานนำกล่าวแล้ว|ประธานนำกล่าว/i.test(text);
+    }
+
+    function renderKathinSection(kathins) {
+      const activeKathins = (kathins || []).filter(k => k.status !== 'CANCELLED');
+      const saenKathins = activeKathins.filter(k => (k.kathinType || '').includes('แสน'));
+      const muenKathins = activeKathins.filter(k => (k.kathinType || '').includes('หมื่น'));
+
+      return `
+        <section class="home-section" aria-label="ข้อมูลกฐินแสนและกฐินหมื่น">
+          <div class="container">
+            <div class="d-flex flex-wrap justify-content-between align-items-end section-header gap-2">
+              <div>
+                <p class="section-eyebrow">งานบุญมหากาลทานประจำปี</p>
+                <h2 class="section-title">🏛 กฐินแสน / กฐินหมื่น</h2>
+                <div class="section-subtitle">รายชื่อวัดและกำหนดการพิธีทอดกฐินประจำปี 2569</div>
+              </div>
+              <div class="d-flex gap-2">
+                <ul class="nav nav-pills" id="home-kathin-tabs">
+                  <li class="nav-item">
+                    <button class="nav-link active py-1 px-3 small fw-semibold" data-filter="all">ทั้งหมด (${activeKathins.length})</button>
+                  </li>
+                  <li class="nav-item">
+                    <button class="nav-link py-1 px-3 small fw-semibold" data-filter="saen">🌟 กฐินแสน (${saenKathins.length})</button>
+                  </li>
+                  <li class="nav-item">
+                    <button class="nav-link py-1 px-3 small fw-semibold" data-filter="muen">🎆 กฐินหมื่น (${muenKathins.length})</button>
+                  </li>
+                </ul>
+                <a href="kathin.html" class="btn btn-outline-primary btn-sm">ดูทั้งหมด →</a>
+              </div>
+            </div>
+
+            <div class="row g-3" id="home-kathin-grid">
+              ${activeKathins.length ? activeKathins.slice(0, 6).map(k => `
+                <div class="col-12 col-md-6 col-lg-4 kathin-grid-item" data-type="${(k.kathinType || '').includes('แสน') ? 'saen' : 'muen'}">
+                  <div class="kathin-card h-100">
+                    ${(k.imageUrl || (k.images && k.images[0])) ? `
+                      <div class="flex-shrink-0" style="width: 52px; height: 52px; border-radius: 8px; overflow: hidden; background: #f8fafc; border: 1px solid #e2e8f0;">
+                        <img src="${esc(k.imageUrl || k.images[0])}" alt="" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.outerHTML='<div class=\\'fs-1 text-warning flex-shrink-0\\'>🎆</div>'">
+                      </div>
+                    ` : `<div class="fs-1 text-warning flex-shrink-0">${(k.kathinType || '').includes('แสน') ? '🌟' : '🎆'}</div>`}
+                    <div class="flex-grow-1 overflow-hidden">
+                      <div class="d-flex justify-content-between align-items-center mb-1">
+                        <div class="d-flex align-items-center gap-1 flex-wrap">
+                          <span class="badge bg-${(k.kathinType||'').includes('แสน') ? 'warning text-dark' : 'info text-dark'} small">
+                            ${esc(k.kathinType || 'กฐิน')}
+                          </span>
+                          ${hasKathinLeader(k) ? `<span class="badge bg-warning text-dark border border-warning small">👑 มีประธานนำกล่าวแล้ว</span>` : ''}
+                        </div>
+                        <small class="text-danger fw-bold font-monospace">${fmtD(k.kathinDate)}</small>
+                      </div>
+                      <strong class="text-navy text-truncate d-block mb-1 fs-6">${esc(k.templeName)}</strong>
+                      <div class="small text-muted text-truncate">
+                        ${esc([k.subdistrict ? `ต.${k.subdistrict}` : '', k.district ? `อ.${k.district}` : '', k.province ? `จ.${k.province}` : ''].filter(Boolean).join(' '))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `).join('') : '<div class="col-12 text-center text-muted py-4">ยังไม่มีข้อมูลวัดทอดกฐินในระบบ</div>'}
+            </div>
+
+            <div class="text-center mt-4">
+              <a href="kathin.html" class="btn btn-outline-primary px-4">ดูรายชื่อวัดที่ได้รับกฐินทั้งหมด (${activeKathins.length} วัด) →</a>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function wireKathinTabs(kathins) {
+      const tabBtns = document.querySelectorAll('#home-kathin-tabs button');
+      const items = document.querySelectorAll('.kathin-grid-item');
+      tabBtns.forEach(btn => {
+        btn.onclick = () => {
+          tabBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const filter = btn.dataset.filter;
+          items.forEach(el => {
+            if (filter === 'all' || el.dataset.type === filter) {
+              el.style.display = '';
+            } else {
+              el.style.display = 'none';
+            }
+          });
+        };
+      });
+    }
+
+    function renderEventsSection(events) {
+      if (!events || !events.length) return '';
+      return `
+        <section class="home-section" aria-label="ตารางกิจกรรมและอบรม">
+          <div class="container">
+            <div class="section-header">
+              <p class="section-eyebrow">กำหนดการทางธรรม</p>
+              <h2 class="section-title">📅 ตารางกิจกรรม / อบรมที่กำลังจะมาถึง</h2>
+              <div class="section-subtitle">ร่วมสั่งสมบุญบารมีและปฏิบัติธรรมตามตารางกิจกรรมประจำปี</div>
+            </div>
+
+            <div class="row g-3">
+              ${events.map(ev => `
+                <div class="col-12 col-md-6 col-lg-4">
+                  <div class="event-card h-100">
+                    <div class="event-date-box">
+                      <div class="fw-bold small">${esc(ev.date)}</div>
+                      <small class="text-muted d-block" style="font-size:0.75rem;">${esc(ev.time || '')}</small>
+                    </div>
+                    <div>
+                      <h3 class="h6 fw-bold text-navy mb-1">${esc(ev.title)}</h3>
+                      <div class="small text-muted mb-2">📍 ${esc(ev.location || 'ธุดงคสถานสุราษฎร์ธานี')}</div>
+                      <p class="small text-secondary mb-0">${esc(ev.description || '')}</p>
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderContactSection(contact) {
+      return `
+        <section class="home-section" aria-label="ข้อมูลติดต่อ">
+          <div class="container">
+            <div class="contact-card">
+              <div class="row g-4 align-items-center">
+                <div class="col-12 col-lg-7">
+                  <p class="section-eyebrow mb-1">ศูนย์ติดต่อประสานงาน</p>
+                  <h2 class="h3 fw-bold text-navy mb-2">${esc(contact.title || 'ติดต่อธุดงคสถานสุราษฎร์ธานี')}</h2>
+                  <p class="text-secondary mb-4">${esc(contact.subtitle || 'ร่วมบุญ สอบถามข้อมูลโครงการ หรือแจ้งข้อมูลวัด')}</p>
+                  
+                  <div class="d-flex flex-column gap-3 small">
+                    <div class="d-flex align-items-start gap-2">
+                      <span class="fs-5 text-primary">📍</span>
+                      <div>
+                        <strong>ที่อยู่:</strong><br>
+                        ${esc(contact.address || 'ตำบลบางใหญ่ อำเภอเมือง จังหวัดสุราษฎร์ธานี')}
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-start gap-2">
+                      <span class="fs-5 text-success">📞</span>
+                      <div>
+                        <strong>เบอร์โทรศัพท์ติดต่อ:</strong><br>
+                        ${esc(contact.phone || '077-xxx-xxx')}
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-start gap-2">
+                      <span class="fs-5 text-info">💬</span>
+                      <div>
+                        <strong>LINE ID:</strong> ${esc(contact.lineId || '@thudongsurat')} &nbsp;|&nbsp;
+                        <strong>Facebook:</strong> ${esc(contact.facebook || 'ธุดงคสถานสุราษฎร์ธานี')}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-lg-5">
+                  <div class="p-3 bg-light rounded-3 border text-center">
+                    <div class="fs-1 mb-2">☸</div>
+                    <h3 class="h5 fw-bold text-navy mb-2">เวลาทำการ</h3>
+                    <p class="text-muted small mb-3">${esc(contact.openHours || 'เปิดทำการทุกวัน 08:00 – 17:00 น.')}</p>
+                    <a href="register.html" class="btn btn-primary btn-sm px-4 py-2 w-100 mb-2">ลงทะเบียนเข้าร่วมโครงการ</a>
+                    <a href="kathin.html" class="btn btn-outline-secondary btn-sm px-4 py-2 w-100">ตรวจสอบข้อมูลกฐิน</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderQuicklinksSection() {
+      return `
+        <section class="home-section border-0 pb-5" aria-label="ลิงก์ด่วน">
+          <div class="container">
+            <h2 class="h5 fw-bold text-navy mb-3">🔗 ลิงก์ด่วนและบริการ</h2>
+            <div class="d-flex flex-wrap gap-3">
+              <a href="register.html" class="quick-link-btn primary-btn">📝 ลงทะเบียนเข้าร่วมโครงการ</a>
+              <a href="register.html#public-list" class="quick-link-btn">📋 ตรวจสอบรายชื่อผู้ลงทะเบียน</a>
+              <a href="kathin.html" class="quick-link-btn">🙏 รายชื่อวัดทอดกฐิน (กฐินแสน / กฐินหมื่น)</a>
+              <a href="admin.html" class="quick-link-btn">⚙️ สำหรับเจ้าหน้าที่ (Admin Panel)</a>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    // Initialize
+    initHomepage();
+  </script>
+</body>
+</html>

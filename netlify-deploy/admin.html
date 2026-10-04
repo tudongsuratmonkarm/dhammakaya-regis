@@ -1,0 +1,903 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>จัดการระบบ | ธุดงคสถานสุราษฎร์ธานี</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet"><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"><link href="css/style.css" rel="stylesheet"></head>
+<body class="admin-layout"><header class="site-header print-hidden" id="admin-site-header"><div class="container d-flex align-items-center justify-content-between"><a href="index.html" class="brand text-decoration-none"><span class="brand-mark">☸</span><span>ธุดงคสถานสุราษฎร์ธานี<br><small>ผู้ดูแลระบบ</small></span></a><a class="btn btn-outline-secondary btn-sm" href="index.html">ดูหน้าเว็บไซต์</a></div></header>
+<main class="admin-main p-0">
+<section id="login-view" class="form-shell mx-auto my-5 p-4" style="max-width:480px"><p class="eyebrow">ADMIN</p><h1 class="h3">เข้าสู่ระบบผู้ดูแล</h1><p class="text-muted">ใช้บัญชีที่ตั้งค่าไว้ใน Netlify Environment Variables</p><form id="login-form" novalidate><label class="form-label" for="username">ชื่อผู้ใช้</label><input id="username" class="form-control mb-3" autocomplete="username" required><label class="form-label" for="password">รหัสผ่าน</label><input id="password" type="password" class="form-control mb-4" autocomplete="current-password" required><button class="btn btn-primary w-100" type="submit">เข้าสู่ระบบ</button></form></section>
+
+<section id="admin-view" class="d-none">
+  <!-- Mobile Topbar (< 992px) -->
+  <div class="admin-mobile-bar d-lg-none bg-white border-bottom px-3 py-2 d-flex align-items-center justify-content-between print-hidden sticky-top shadow-sm">
+    <div class="d-flex align-items-center gap-2">
+      <button class="btn btn-sm btn-outline-secondary" id="admin-sidebar-toggle" type="button" aria-label="เปิดเมนู">
+        <span class="fs-5 lh-1">☰</span>
+      </button>
+      <span class="fw-bold text-navy small">ธุดงคสถานสุราษฎร์ธานี</span>
+    </div>
+    <div class="d-flex gap-1 align-items-center">
+      <a href="index.html" class="btn btn-outline-secondary btn-sm py-1 px-2" style="font-size:0.8rem;">🌐 ดูเว็บ</a>
+      <button id="logout-mobile" class="btn btn-outline-danger btn-sm py-1 px-2" style="font-size:0.8rem;">🚪 ออก</button>
+    </div>
+  </div>
+
+  <div id="admin-sidebar-backdrop" class="admin-sidebar-backdrop d-none"></div>
+
+  <div class="admin-container">
+    <!-- Left Sidebar Navigation -->
+    <aside class="admin-sidebar print-hidden" id="admin-sidebar">
+      <div class="p-3 border-bottom d-flex align-items-center justify-content-between">
+        <div class="brand">
+          <span class="brand-mark fs-3">☸</span>
+          <div>
+            <div class="fw-bold text-navy" style="font-size:0.95rem; line-height:1.2;">ผู้ดูแลระบบ</div>
+            <small class="text-muted" style="font-size:0.75rem;">ธุดงคสถานสุราษฎร์ธานี</small>
+          </div>
+        </div>
+        <div class="d-flex align-items-center gap-1">
+          <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2 d-none d-lg-inline-flex align-items-center gap-1" id="btn-collapse-sidebar" title="ซ่อนแถบเมนู (โหมดเต็มจอ)">
+            <span style="font-size:0.8rem;">◀ ซ่อน</span>
+          </button>
+          <button type="button" class="btn-close d-lg-none" id="admin-sidebar-close" aria-label="ปิดเมนู"></button>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav p-2 admin-tabs" aria-label="เมนูผู้ดูแล">
+        <div class="nav-category-title px-2 pt-2 pb-1 text-uppercase fw-bold">ศูนย์ควบคุม</div>
+        <button class="sidebar-nav-btn active" data-tab="dashboard">
+          <span class="nav-icon">📊</span>
+          <span>ภาพรวม &amp; รายงาน</span>
+        </button>
+
+        <div class="nav-category-title px-2 pt-3 pb-1 text-uppercase fw-bold">จัดการงานอบรม</div>
+        <button class="sidebar-nav-btn" data-tab="projects">
+          <span class="nav-icon">📁</span>
+          <span>โครงการ</span>
+        </button>
+        <button class="sidebar-nav-btn" data-tab="forms">
+          <span class="nav-icon">⚙️</span>
+          <span>แบบฟอร์ม / ฟิลด์</span>
+        </button>
+        <button class="sidebar-nav-btn" data-tab="sessions">
+          <span class="nav-icon">🗓️</span>
+          <span>รอบ / รุ่น</span>
+        </button>
+        <button class="sidebar-nav-btn" data-tab="registrations">
+          <span class="nav-icon">📝</span>
+          <span>ผู้สมัคร</span>
+        </button>
+
+        <div class="nav-category-title px-2 pt-3 pb-1 text-uppercase fw-bold">ฐานข้อมูลกลาง (Master)</div>
+        <button class="sidebar-nav-btn" data-tab="persons">
+          <span class="nav-icon">👤</span>
+          <span>บุคคล (Persons)</span>
+        </button>
+        <button class="sidebar-nav-btn" data-tab="temples">
+          <span class="nav-icon">🏛️</span>
+          <span>ข้อมูลวัด (Temples)</span>
+        </button>
+        <button class="sidebar-nav-btn" data-tab="kathin">
+          <span class="nav-icon">🎆</span>
+          <span>ข้อมูลงานกฐิน</span>
+        </button>
+        <button class="sidebar-nav-btn" data-tab="disbursements">
+          <span class="nav-icon">💰</span>
+          <span>เบิกปัจจัยกฐิน</span>
+        </button>
+
+        <div class="nav-category-title px-2 pt-3 pb-1 text-uppercase fw-bold">หน้าเว็บไซต์หลัก</div>
+        <button class="sidebar-nav-btn" data-tab="homepage">
+          <span class="nav-icon">🌐</span>
+          <span>จัดการหน้าแรก (CMS)</span>
+        </button>
+
+        <div class="nav-category-title px-2 pt-3 pb-1 text-uppercase fw-bold">ระบบและผู้ใช้งาน</div>
+        <button class="sidebar-nav-btn" data-tab="admins">
+          <span class="nav-icon">👥</span>
+          <span>จัดการผู้ดูแล (Admins)</span>
+        </button>
+      </nav>
+
+      <div class="p-3 border-top mt-auto bg-light">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <span class="badge bg-success-subtle text-success border border-success-subtle">Online</span>
+          <a class="btn btn-outline-secondary btn-xs small py-0 px-2" href="index.html" target="_blank" style="font-size:0.75rem;">🌐 เว็บหลัก</a>
+        </div>
+        <div class="small text-muted mb-2 text-truncate" id="sidebar-admin-user-info" style="font-size:0.8rem;">
+          👤 <span id="sidebar-admin-name" class="fw-semibold text-dark">-</span>
+        </div>
+        <button id="logout" class="btn btn-outline-danger btn-sm w-100">🚪 ออกจากระบบ</button>
+      </div>
+    </aside>
+
+    <!-- Content Area -->
+    <div class="admin-content-area p-3 p-md-4">
+      <!-- Admin Top Utility Bar -->
+      <div class="admin-top-bar d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom print-hidden bg-white px-3 py-2 rounded shadow-sm">
+        <div class="d-flex align-items-center gap-2">
+          <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1 shadow-sm px-2 py-1" id="btn-toggle-sidebar" type="button" title="สลับแสดง/ซ่อนเมนูด้านซ้าย (Ctrl+B)">
+            <span class="fs-6 lh-1">☰</span>
+            <span class="small fw-semibold" id="btn-toggle-sidebar-label">ซ่อนเมนู</span>
+          </button>
+          <span class="badge bg-light text-navy border small d-none d-md-inline-block" id="badge-view-mode">🖥️ โหมดปกติ</span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge bg-primary-subtle text-primary border border-primary-subtle fw-semibold px-2 py-1" id="top-admin-user-badge">👤 ผู้ดูแล</span>
+          <a href="index.html" target="_blank" class="btn btn-outline-primary btn-sm py-1 px-2" style="font-size:0.8rem;">🌐 เปิดหน้าเว็บ</a>
+        </div>
+      </div>
+
+      <div id="admin-alert" aria-live="polite"></div>
+
+      <!-- Unified Interactive Dashboard Pane -->
+      <section id="dashboard-pane" class="admin-pane tab-pane">
+        <!-- Dashboard Top Header Bar -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 pb-2 border-bottom">
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <h2 class="h5 fw-bold text-navy mb-0">📊 ภาพรวม &amp; รายงานการดำเนินงาน</h2>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle" id="dash-active-status-badge">ระบบพร้อมใช้งาน</span>
+          </div>
+          <div class="d-flex flex-wrap gap-2 align-items-center">
+            <button id="btn-refresh-dashboard" class="btn btn-outline-secondary btn-sm" title="โหลดข้อมูลล่าสุด">🔄 รีเฟรชข้อมูล</button>
+            <button id="refresh-report-sheets" class="btn btn-success btn-sm">📊 Refresh ลง Google Sheets</button>
+          </div>
+        </div>
+
+        <div id="report-status" class="mb-3"></div>
+
+        <!-- Filter & Search Card: Choose Project / Search Person / Search Temple -->
+        <div class="card mb-4 border-0 shadow-sm bg-light">
+          <div class="card-body p-3">
+            <div class="row g-2 align-items-center">
+              <div class="col-12 col-md-5">
+                <label class="form-label small fw-bold text-secondary mb-1">📁 กรองโครงการเพื่อเจาะลึก:</label>
+                <select id="dash-project-filter" class="form-select form-select-sm fw-semibold">
+                  <option value="">ทุกโครงการ (ภาพรวมทั้งหมด)</option>
+                </select>
+              </div>
+              <div class="col-12 col-md-4">
+                <label class="form-label small fw-bold text-secondary mb-1">👤 ค้นหาบุคคล (Person Profile):</label>
+                <div class="input-group input-group-sm position-relative">
+                  <span class="input-group-text bg-white">🔍</span>
+                  <input type="text" id="dash-person-search-input" class="form-control" placeholder="พิมพ์ชื่อ-ฉายา หรือเบอร์โทร..." autocomplete="off">
+                  <div id="dash-person-autocomplete" class="suggestions d-none" style="top:100%; z-index:1050;"></div>
+                </div>
+              </div>
+              <div class="col-12 col-md-3">
+                <label class="form-label small fw-bold text-secondary mb-1">🏛️ ค้นหาประวัติวัด (Temple):</label>
+                <div class="input-group input-group-sm position-relative">
+                  <span class="input-group-text bg-white">🏛️</span>
+                  <input type="text" id="dash-temple-search-input" class="form-control" placeholder="พิมพ์ชื่อวัด หรือจังหวัด..." autocomplete="off">
+                  <div id="dash-temple-autocomplete" class="suggestions d-none" style="top:100%; z-index:1050;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI Cards: Fast Answers to Admin Questions -->
+        <div class="row g-3 mb-4" id="dash-kpis"></div>
+
+        <!-- Interactive 2-Column Section: Sessions on Left, Temples on Right -->
+        <div class="row g-4 mb-4">
+          <!-- Left: Sessions Capacity Meter & Interactive Drill-down -->
+          <div class="col-12 col-lg-5">
+            <div class="card h-100 border shadow-sm">
+              <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
+                <div>
+                  <strong class="text-navy">🗓️ สถานะรอบ / รุ่น</strong>
+                  <small class="text-muted d-block" id="dash-session-subheading">คลิกที่รุ่นเพื่อดูรายชื่อวัดที่ส่งคนมา</small>
+                </div>
+                <button id="dash-reset-session-filter" class="btn btn-outline-secondary btn-xs d-none" style="font-size:0.75rem;">ดูทุกรุ่น</button>
+              </div>
+              <div class="card-body p-2" id="dash-sessions-list" style="max-height: 480px; overflow-y: auto;"></div>
+            </div>
+          </div>
+
+          <!-- Right: Temple Rankings & Drilldown -->
+          <div class="col-12 col-lg-7">
+            <div class="card h-100 border shadow-sm">
+              <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div>
+                  <strong class="text-navy" id="dash-temple-section-title">🏛️ วัดที่ส่งผู้เข้าร่วม</strong>
+                  <span class="badge bg-secondary ms-1" id="dash-temple-count-badge">0 วัด</span>
+                </div>
+                <div class="input-group input-group-sm" style="max-width: 220px;">
+                  <input type="text" id="dash-temple-table-search" class="form-control" placeholder="ค้นหาในตาราง...">
+                </div>
+              </div>
+              <div class="card-body p-0">
+                <div class="table-responsive" style="max-height: 480px; overflow-y: auto;">
+                  <table class="table table-hover table-sm align-middle mb-0">
+                    <thead class="table-light sticky-top">
+                      <tr>
+                        <th style="width: 45px;" class="text-center">#</th>
+                        <th>ชื่อวัด / ที่ตั้ง</th>
+                        <th style="width: 105px;" class="text-center">ผู้เข้าร่วม</th>
+                        <th style="width: 130px;" class="text-center">พระ / ฆราวาส</th>
+                        <th style="width: 80px;" class="text-center">โปรไฟล์</th>
+                      </tr>
+                    </thead>
+                    <tbody id="dash-temple-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="card-footer bg-light py-2 small text-muted d-flex justify-content-between align-items-center">
+                <span>💡 <em>คลิกที่แถวหรือชื่อวัดเพื่อดูข้อมูลเชิงลึกและรายชื่อบุคคล</em></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Demographics & Provinces Deep Dive -->
+        <div class="row g-4 mb-4">
+          <div class="col-12 col-md-5">
+            <div class="card border shadow-sm h-100">
+              <div class="card-header bg-white py-2">
+                <strong class="text-navy">👥 สัดส่วนผู้เข้าร่วมโครงการ</strong>
+              </div>
+              <div class="card-body p-3" id="dash-demographics-body"></div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-7">
+            <div class="card border shadow-sm h-100">
+              <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
+                <strong class="text-navy">🗺️ ผู้สมัครแยกตามจังหวัด</strong>
+                <small class="text-muted" id="dash-provinces-count"></small>
+              </div>
+              <div class="card-body p-0">
+                <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
+                  <table class="table table-sm table-hover mb-0 align-middle">
+                    <thead class="table-light sticky-top">
+                      <tr>
+                        <th>จังหวัด</th>
+                        <th class="text-center">ผู้สมัครทั้งหมด</th>
+                        <th class="text-center">พระ</th>
+                        <th class="text-center">ฆราวาส</th>
+                        <th class="text-center">จำนวนวัด</th>
+                      </tr>
+                    </thead>
+                    <tbody id="dash-provinces-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kathin Summary Card -->
+        <div class="card border shadow-sm mb-3">
+          <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
+            <strong class="text-navy">🎆 สรุปสถานะข้อมูลกฐิน</strong>
+            <button class="btn btn-sm btn-outline-secondary" onclick="document.querySelector('[data-tab=kathin]').click()">จัดการกฐิน →</button>
+          </div>
+          <div class="card-body p-3">
+            <div class="row g-3" id="dash-kathin-summary"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Legacy alias pane if needed -->
+      <section id="reports-pane" class="admin-pane tab-pane d-none"></section>
+
+      <!-- Homepage CMS Pane -->
+      <section id="homepage-pane" class="admin-pane tab-pane d-none">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 pb-2 border-bottom">
+          <div>
+            <h2 class="h5 fw-bold text-navy mb-0">🌐 จัดการหน้าแรกและศูนย์รวมข้อมูล (Homepage CMS)</h2>
+            <small class="text-muted">ปรับแต่งเนื้อหา เปิด/ปิด และจัดลำดับส่วนประกอบบนหน้าแรก Public Homepage ได้โดยตรง</small>
+          </div>
+          <div class="d-flex gap-2">
+            <a href="index.html" target="_blank" class="btn btn-outline-primary btn-sm">👁️ ดูหน้าแรกจริง</a>
+            <button id="btn-save-homepage-cms" class="btn btn-primary btn-sm fw-bold btn-save-homepage-cms-action">💾 บันทึกการเปลี่ยนแปลงหน้าแรก</button>
+          </div>
+        </div>
+
+        <div id="homepage-cms-alert" class="mb-3"></div>
+
+        <!-- 1. Sections Manager: Toggle & Reorder -->
+        <div class="card mb-4 border shadow-sm">
+          <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+            <strong class="text-navy">🔀 จัดลำดับและเปิด/ปิด ส่วนประกอบหน้าแรก (Sections)</strong>
+            <small class="text-muted">คลิก ⬆️ เลื่อนขึ้น หรือ ⬇️ เลื่อนลง เพื่อเรียงลำดับส่วนที่ต้องการให้แสดงก่อน-หลัง</small>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover table-sm align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th style="width: 70px;" class="text-center">เปิด/ปิด</th>
+                    <th style="width: 90px;" class="text-center">ลำดับ</th>
+                    <th>ชื่อส่วนประกอบบนหน้าแรก (Section)</th>
+                    <th style="width: 150px;" class="text-center">สถานะปัจจุบัน</th>
+                    <th style="width: 140px;" class="text-center">ปรับลำดับ</th>
+                  </tr>
+                </thead>
+                <tbody id="cms-sections-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Content Customization Tabs -->
+        <div class="card border shadow-sm mb-4">
+          <div class="card-header bg-light p-2">
+            <ul class="nav nav-pills gap-1" id="cms-content-tabs">
+              <li class="nav-item">
+                <button class="nav-link active py-1 px-3 small fw-semibold" data-cms-tab="hero">🖼️ Banner / หัวเว็บ</button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link py-1 px-3 small fw-semibold" data-cms-tab="announcements">📢 ข่าวประกาศ</button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link py-1 px-3 small fw-semibold" data-cms-tab="stats">📊 ตัวเลขสถิติ</button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link py-1 px-3 small fw-semibold" data-cms-tab="events">📅 ตารางกิจกรรม</button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link py-1 px-3 small fw-semibold" data-cms-tab="contact">📞 ข้อมูลติดต่อ</button>
+              </li>
+            </ul>
+          </div>
+          <div class="card-body p-3 p-md-4" id="cms-content-body"></div>
+          <div class="card-footer bg-light d-flex flex-wrap justify-content-between align-items-center gap-2 py-2 px-3">
+            <span class="text-muted small">💡 เมื่อแก้ไขข้อมูลเสร็จสิ้นแล้ว อย่าลืมกดปุ่มบันทึกเพื่ออัปเดตหน้าแรกจริง</span>
+            <button type="button" class="btn btn-primary btn-sm fw-bold btn-save-homepage-cms-action" id="btn-save-homepage-cms-bottom">💾 บันทึกการเปลี่ยนแปลงหน้าแรก</button>
+          </div>
+        </div>
+      </section>
+<section id="projects-pane" class="admin-pane tab-pane d-none">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <h2 class="h5 mb-0">จัดการโครงการ (Projects)</h2>
+    <div class="d-flex gap-2 flex-wrap">
+      <button id="btn-open-public-list-config-prj" class="btn btn-outline-info btn-sm">🌐 ตั้งค่าแสดงผลหน้าสาธารณะ</button>
+      <button id="add-project" class="btn btn-primary btn-sm">+ เพิ่มโครงการ</button>
+    </div>
+  </div>
+  <div id="project-editor"></div>
+</section>
+<section id="forms-pane" class="admin-pane tab-pane d-none">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <div class="d-flex align-items-center gap-2">
+      <h2 class="h5 mb-0">สร้างแบบฟอร์ม / จัดการช่องกรอกข้อมูล</h2>
+      <select id="form-project-selector" class="form-select form-select-sm" style="width:auto;"></select>
+    </div>
+    <div class="d-flex gap-2">
+      <button id="quick-add-remarks" class="btn btn-outline-secondary btn-sm" title="เพิ่มตัวอย่าง: หมายเหตุ">📝 + หมายเหตุ</button>
+      <button id="quick-add-health" class="btn btn-outline-secondary btn-sm" title="เพิ่มตัวอย่าง: โรคประจำตัว">🏥 + โรคประจำตัว</button>
+      <button id="quick-add-shirt" class="btn btn-outline-secondary btn-sm" title="เพิ่มตัวอย่าง: ขนาดเสื้อ">👕 + ขนาดเสื้อ</button>
+      <button id="quick-add-address" class="btn btn-outline-secondary btn-sm" title="เพิ่มตัวอย่าง: ที่อยู่ติดต่อ (บันทึกลงฐานข้อมูลบุคคล Persons)">📍 + ที่อยู่ติดต่อ</button>
+      <button id="add-form-field" class="btn btn-primary btn-sm">+ เพิ่ม Field ใหม่</button>
+    </div>
+  </div>
+
+  <!-- Standard Core Fields Info Box -->
+  <div class="card mb-3 border-secondary border-opacity-25 shadow-sm">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center py-2">
+      <strong class="small text-navy">⚙️ ช่องกรอกข้อมูลมาตรฐานของระบบ (Core Fields มีให้เสมอในแบบฟอร์มลงทะเบียน)</strong>
+      <span class="badge bg-primary">ระบบมาตรฐาน</span>
+    </div>
+    <div class="card-body p-2">
+      <div class="table-responsive">
+        <table class="table table-sm table-bordered bg-white mb-0 small">
+          <thead class="table-light">
+            <tr>
+              <th style="width:140px;">ตัวแปร (Key)</th>
+              <th style="width:200px;">ป้ายกำกับ (Label)</th>
+              <th style="width:120px;">ประเภท</th>
+              <th>สถานะ / การทำงาน</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>prefix</code></td><td>คำนำหน้า (พระ, นาย, นาง, นางสาว, อื่น ๆ)</td><td>Select</td><td><span class="badge bg-danger">บังคับ</span> เมื่อเลือก "พระ" จะเปิดช่อง ฉายา, วันบวช, พรรษา ให้อัตโนมัติ</td></tr>
+            <tr><td><code>monasticName</code></td><td>ฉายา</td><td>Text</td><td>แสดงอัตโนมัติเมื่อคำนำหน้าเป็น "พระ"</td></tr>
+            <tr><td><code>ordinationDate</code></td><td>วันบวช (พ.ศ. วว/มม/ปปปป)</td><td>Text</td><td>แสดงเมื่อเลือก "พระ" พร้อมคำนวณพรรษาให้อัตโนมัติ</td></tr>
+            <tr><td><code>phansa</code></td><td>พรรษา</td><td>Number</td><td>คำนวณอัตโนมัติจากวันบวช</td></tr>
+            <tr><td><code>firstName</code></td><td>ชื่อ</td><td>Text</td><td><span class="badge bg-danger">บังคับ</span></td></tr>
+            <tr><td><code>lastName</code></td><td>นามสกุล</td><td>Text</td><td><span class="badge bg-danger">บังคับ</span></td></tr>
+            <tr><td><code>mobile</code></td><td>เบอร์โทรศัพท์ (10 หลัก)</td><td>Tel</td><td><span class="badge bg-danger">บังคับ</span></td></tr>
+            <tr><td><code>nationalId</code></td><td>เลขบัตรประชาชน (13 หลัก)</td><td>Text</td><td>ตรวจนับ 13 หลัก</td></tr>
+            <tr><td><code>birthDate</code></td><td>วันเกิด (พ.ศ. วว/มม/ปปปป)</td><td>Text</td><td>คำนวณอายุให้อัตโนมัติ</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="text-muted small mt-2">
+        💡 ฟิลด์พื้นฐานด้านบนนี้ <strong>มีพร้อมใช้งานอยู่ในหน้าลงทะเบียนตลอดเวลา</strong> คุณสามารถสร้างหรือลบ <strong>ฟิลด์ข้อมูลเพิ่มเติม</strong> สำหรับโครงการนี้ได้ที่ตารางด้านล่าง:
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <h3 class="h6 fw-bold text-navy mb-0">📋 ฟิลด์ข้อมูลเพิ่มเติมของโครงการ (Custom Fields)</h3>
+    <small class="text-muted" id="custom-fields-count"></small>
+  </div>
+  <div id="form-field-list" class="table-wrap"></div>
+</section>
+<section id="kathin-pane" class="admin-pane tab-pane d-none">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <h2 class="h5 mb-0">จัดการข้อมูลกฐิน</h2>
+    <div class="d-flex flex-wrap gap-2 align-items-center">
+      <div class="btn-group btn-group-sm" role="group" aria-label="โหมดการแสดงผลกฐิน">
+        <button type="button" class="btn btn-outline-primary" id="btn-kathin-view-cards" title="มุมมองการ์ด (อ่านง่ายบนมือถือ ข้อมูลครบ)">🎴 การ์ด</button>
+        <button type="button" class="btn btn-outline-primary" id="btn-kathin-view-table" title="มุมมองตาราง">📋 ตาราง</button>
+      </div>
+      <button id="btn-delete-selected-kathins" class="btn btn-danger btn-sm d-none">🗑️ ลบที่เลือก (<span id="selected-kathin-count">0</span> รายการ)</button>
+      <button id="add-kathin" class="btn btn-primary btn-sm">+ เพิ่มข้อมูลกฐิน</button>
+      <label class="btn btn-outline-secondary btn-sm mb-0">Import Excel (Upsert)<input id="kathin-excel-file" type="file" accept=".xlsx,.xls" hidden></label>
+      <button id="export-kathin" class="btn btn-outline-secondary btn-sm">Export Excel</button>
+    </div>
+  </div>
+
+  <!-- Sub-page tabs for กฐินแสน and กฐินหมื่น -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+    <ul class="nav nav-pills gap-2 mb-0" id="admin-kathin-tabs">
+      <li class="nav-item">
+        <button class="nav-link active fw-semibold" id="tab-admin-saen" data-type="กฐินแสน">🌟 กฐินแสน (<span id="admin-count-saen">0</span>)</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link fw-semibold" id="tab-admin-muen" data-type="กฐินหมื่น">🎆 กฐินหมื่น (<span id="admin-count-muen">0</span>)</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link fw-semibold" id="tab-admin-all" data-type="">ทั้งหมด (<span id="admin-count-all">0</span>)</button>
+      </li>
+    </ul>
+    <div>
+      <button class="btn btn-outline-warning text-dark btn-sm fw-semibold shadow-sm" id="btn-admin-leader-toggle" title="กรองเฉพาะวัดที่มีประธานนำกล่าวแล้ว">
+        👑 มีประธานนำกล่าวแล้ว (<span id="admin-count-leader">0</span>)
+      </button>
+    </div>
+  </div>
+<div class="alert alert-info py-2 mb-3">
+  <div class="d-flex align-items-start gap-2">
+    <span class="fs-5">📋</span>
+    <div>
+      <strong>คอลัมน์ที่ต้องมีในไฟล์ Excel (ชื่อหัวคอลัมน์ภาษาไทย)</strong>
+      <div class="mt-2">
+        <span class="badge bg-danger me-1">*บังคับ</span>
+        <code class="me-2">ชื่อวัด*</code>
+        <code class="me-2">ตำบล*</code>
+        <code class="me-2">อำเภอ*</code>
+        <code class="me-2">จังหวัด*</code>
+        <code class="me-2">ประเภทวัด</code>
+        <code class="me-2">มีประธานนำกล่าวแล้ว</code>
+        <code class="me-2">จำนวนพระจำพรรษา</code>
+        <code class="me-2">ประเภทกฐิน</code>
+        <code class="me-2">วันทอดกฐิน</code>
+        <code class="me-2">เวลาทอดกฐิน</code>
+        <code class="me-2">ชื่อเจ้าอาวาส</code>
+        <code class="me-2">เบอร์โทรเจ้าอาวาส</code>
+        <code class="me-2">ชื่อศิษยานุศิษย์ คนที่1</code>
+        <code class="me-2">เบอร์โทรศิษยานุศิษย์ คนที่1</code>
+        <code class="me-2">ชื่อศิษยานุศิษย์ คนที่2</code>
+        <code class="me-2">เบอร์โทรศิษยานุศิษย์ คนที่2</code>
+      </div>
+      <div class="mt-1 text-muted small">
+        💡 วันทอดกฐิน รูปแบบ <code>วว/มม/ปปปป</code> เช่น <code>08/11/2569</code> (หรือ <code>08 พ.ย. 69</code>) &nbsp;|&nbsp;
+        เวลา รูปแบบ <code>09:30</code> &nbsp;|&nbsp;
+        ระบบจะ <strong>Upsert</strong> (ถ้ามีอยู่แล้วจะอัปเดต ถ้าไม่มีจะสร้างใหม่) โดยใช้ <em>ชื่อวัด + จังหวัด</em> เป็น unique key
+      </div>
+    </div>
+  </div>
+</div>
+<div id="kathin-import-preview" class="d-none mb-3"></div>
+<div id="kathin-bulk-bar" class="alert alert-warning py-2 px-3 d-none mb-3 d-flex flex-wrap justify-content-between align-items-center gap-3 shadow-sm border-warning">
+  <div class="d-flex align-items-center gap-2 flex-wrap">
+    <span>☑️ เลือกอยู่ <strong><span id="selected-kathin-count-bar">0</span></strong> รายการ:</span>
+    <button id="btn-deselect-all-kathins" type="button" class="btn btn-link btn-sm text-decoration-none p-0">ยกเลิกการเลือก</button>
+  </div>
+  <div class="d-flex align-items-center gap-2 flex-wrap">
+    <span class="small fw-bold text-dark">เปลี่ยนสถานะ:</span>
+    <div class="btn-group btn-group-sm" role="group">
+      <button type="button" class="btn btn-success btn-bulk-kathin-status" data-status="APPROVED">✅ อนุมัติ</button>
+      <button type="button" class="btn btn-warning text-dark btn-bulk-kathin-status" data-status="PENDING">⏳ รอดำเนินการ</button>
+      <button type="button" class="btn btn-secondary btn-bulk-kathin-status" data-status="CANCELLED">❌ ยกเลิก</button>
+    </div>
+    <div class="vr mx-1 d-none d-md-inline"></div>
+    <button id="btn-delete-selected-kathins-bar" type="button" class="btn btn-outline-danger btn-sm">🗑️ ลบที่เลือก</button>
+  </div>
+</div>
+<div id="kathin-table" class="table-wrap"></div>
+</section>
+<section id="registrations-pane" class="admin-pane tab-pane d-none">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+      <h2 class="h5 mb-0">รายชื่อผู้สมัคร</h2>
+      <select id="registration-project-filter" class="form-select form-select-sm" style="width:auto;"></select>
+      <span id="reg-project-public-status" class="d-none"></span>
+    </div>
+    <div class="d-flex gap-2 flex-wrap align-items-center">
+      <div class="btn-group btn-group-sm" role="group" aria-label="โหมดการแสดงผลผู้สมัคร">
+        <button type="button" class="btn btn-outline-primary" id="btn-reg-view-cards" title="มุมมองการ์ด (อ่านง่ายบนมือถือ ข้อมูลครบ)">🎴 การ์ด</button>
+        <button type="button" class="btn btn-outline-primary" id="btn-reg-view-table" title="มุมมองตาราง">📋 ตาราง</button>
+      </div>
+      <button id="btn-open-public-list-config" class="btn btn-outline-info btn-sm">🌐 ตั้งค่าแสดงผลหน้าสาธารณะ</button>
+      <button id="admin-add-person" class="btn btn-primary btn-sm">+ เพิ่มรายชื่อ (Override)</button>
+      <button id="export-registrations" class="btn btn-outline-secondary btn-sm">Export Excel</button>
+    </div>
+  <!-- Status tabs filter -->
+  <div class="d-flex flex-wrap gap-2 mb-3 align-items-center justify-content-between">
+    <div class="btn-group btn-group-sm flex-wrap" id="reg-status-filter-group" role="group">
+      <button type="button" class="btn btn-outline-secondary active reg-status-filter-btn" data-status="">ทั้งหมด (<span id="reg-count-all">0</span>)</button>
+      <button type="button" class="btn btn-outline-success reg-status-filter-btn" data-status="ACTIVE">🟢 ลงทะเบียน (<span id="reg-count-active">0</span>)</button>
+      <button type="button" class="btn btn-outline-primary reg-status-filter-btn" data-status="ATTENDED">🔵 มาเข้าร่วม (<span id="reg-count-attended">0</span>)</button>
+      <button type="button" class="btn btn-outline-warning text-dark reg-status-filter-btn" data-status="ABSENT">🟠 ไม่มาเข้าร่วม (<span id="reg-count-absent">0</span>)</button>
+      <button type="button" class="btn btn-outline-danger reg-status-filter-btn" data-status="CANCELLED">⚪ ยกเลิก (<span id="reg-count-cancelled">0</span>)</button>
+    </div>
+    <div class="small text-muted" id="reg-filtered-count-text"></div>
+  </div>
+  <div class="input-group mb-3"><input id="registration-search" class="form-control" placeholder="ค้นหาชื่อ วัด รุ่น หรือเบอร์โทร"><button id="registration-search-button" class="btn btn-outline-primary">ค้นหา</button></div>
+  <div id="registration-table" class="table-wrap"></div>
+</section>
+<section id="persons-pane" class="admin-pane tab-pane d-none">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <h2 class="h5 mb-0">ข้อมูลบุคคลกลาง (Persons Master)</h2>
+    <div class="d-flex gap-2 flex-wrap align-items-center">
+      <div class="btn-group btn-group-sm" role="group" aria-label="โหมดการแสดงผลบุคคล">
+        <button type="button" class="btn btn-outline-primary" id="btn-person-view-cards" title="มุมมองการ์ด (อ่านง่ายบนมือถือ ข้อมูลครบ)">🎴 การ์ด</button>
+        <button type="button" class="btn btn-outline-primary" id="btn-person-view-table" title="มุมมองตาราง">📋 ตาราง</button>
+      </div>
+      <button id="export-persons" class="btn btn-outline-secondary btn-sm">Export Excel</button>
+    </div>
+  </div>
+  <div class="input-group mb-3"><input id="person-search" class="form-control" placeholder="ค้นหาชื่อ นามสกุล ฉายา เบอร์โทร หรือวัด"><button id="person-search-button" class="btn btn-outline-primary">ค้นหา</button></div>
+  <div id="person-table" class="table-wrap"></div>
+</section>
+<section id="sessions-pane" class="admin-pane tab-pane d-none">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <div>
+      <h2 class="h5 mb-0">จัดการรอบ/รุ่น/การเดินทาง (Sessions Master)</h2>
+      <small class="text-muted">กำหนดกลุ่ม รอบ รุ่น รถ หรือเที่ยวเดินทางสำหรับแต่ละโครงการ</small>
+    </div>
+    <button id="add-session" class="btn btn-primary btn-sm">+ เพิ่ม Session ใหม่</button>
+  </div>
+
+  <!-- Filter bar -->
+  <div class="card mb-3 border-0 bg-light">
+    <div class="card-body p-2">
+      <div class="row g-2 align-items-center">
+        <div class="col-md-5">
+          <label class="form-label small mb-1 text-muted">กรองตามโครงการ</label>
+          <select id="session-project-filter" class="form-select form-select-sm"></select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label small mb-1 text-muted">กรองตามประเภท (Session Type)</label>
+          <select id="session-type-filter" class="form-select form-select-sm">
+            <option value="">ทั้งหมดทุกประเภท</option>
+            <option value="BATCH">รุ่น (BATCH) เช่น รุ่นที่ 1</option>
+            <option value="ROUND">รอบ (ROUND) เช่น รอบเช้า / รอบบ่าย</option>
+            <option value="VEHICLE">รถ/คัน (VEHICLE) เช่น รถคันที่ 1</option>
+            <option value="GROUP">กลุ่ม (GROUP) เช่น กลุ่ม A, สาย 1</option>
+            <option value="TRIP">เที่ยว/เดินทาง (TRIP) เช่น เที่ยวไป, เที่ยวกลับ</option>
+            <option value="OTHER">อื่น ๆ (OTHER)</option>
+          </select>
+        </div>
+        <div class="col-md-3 text-end pt-3">
+          <span class="text-muted small" id="session-count-text"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="session-editor"></div>
+</section>
+<section id="temples-pane" class="admin-pane tab-pane d-none">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <h2 class="h5 mb-0">จัดการข้อมูลวัด</h2>
+    <div class="d-flex flex-wrap gap-2 align-items-center">
+      <div class="btn-group btn-group-sm" role="group" aria-label="โหมดการแสดงผลวัด">
+        <button type="button" class="btn btn-outline-primary" id="btn-temple-view-cards" title="มุมมองการ์ด (อ่านง่ายบนมือถือ ข้อมูลครบ)">🎴 การ์ด</button>
+        <button type="button" class="btn btn-outline-primary" id="btn-temple-view-table" title="มุมมองตาราง">📋 ตาราง</button>
+      </div>
+      <button id="btn-delete-selected-temples" class="btn btn-danger btn-sm d-none">🗑️ ลบที่เลือก (<span id="selected-temple-count">0</span> รายการ)</button>
+      <button id="add-temple" class="btn btn-primary btn-sm">+ เพิ่มวัด</button>
+      <label class="btn btn-outline-secondary btn-sm mb-0">Import Excel<input id="excel-file" type="file" accept=".xlsx,.xls" hidden></label>
+      <button id="export-temples" class="btn btn-outline-secondary btn-sm">Export Excel</button>
+    </div>
+  </div>
+  <div class="alert alert-info py-2 mb-3">
+    <div class="d-flex align-items-start gap-2">
+      <span class="fs-5">📋</span>
+      <div>
+        <strong>คอลัมน์แนะนำสำหรับไฟล์ Excel ข้อมูลวัด (รองรับระบบ Upsert อัปเดตข้อมูลอัตโนมัติ)</strong>
+        <div class="mt-2">
+          <span class="badge bg-danger me-1">*บังคับ</span>
+          <code class="me-2">ชื่อวัด*</code>
+          <code class="me-2">จังหวัด*</code>
+          <span class="badge bg-secondary me-1 ms-2">ถ้ามี</span>
+          <code class="me-2">ตำบล</code>
+          <code class="me-2">อำเภอ</code>
+          <code class="me-2">เจ้าอาวาส / ชื่อเจ้าอาวาส</code>
+          <code class="me-2 text-primary fw-bold">เบอร์โทรเจ้าอาวาส</code>
+          <code class="me-2">เบอร์โทร / เบอร์วัด / เบอร์ติดต่อ</code>
+        </div>
+        <div class="mt-1 text-muted small">
+          💡 <strong>ระบบ Upsert อัตโนมัติ:</strong> ถ้าพบชื่อวัดและจังหวัดที่ตรงกันในฐานข้อมูล ระบบจะ <strong>อัปเดต</strong> เบอร์โทรเจ้าอาวาส, เบอร์วัด, ชื่อเจ้าอาวาส, ตำบล, อำเภอ ให้ทันทีโดยไม่สร้างวัดซ้ำ &nbsp;|&nbsp;
+          ถ้าเป็นวัดใหม่ระบบจะเพิ่มรายการใหม่ให้ &nbsp;|&nbsp; หัวคอลัมน์รองรับหลายรูปแบบ เช่น <em>"ชื่อเจ้าอาวาส", "เจ้าอาวาส", "เบอร์โทรเจ้าอาวาส", "เบอร์เจ้าอาวาส", "เบอร์โทร", "เบอร์วัด", "เบอร์ติดต่อ"</em>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="import-preview" class="d-none mb-3"></div>
+  <div class="input-group mb-3">
+    <input id="temple-search" class="form-control" placeholder="ค้นหาชื่อวัด ตำบล อำเภอ จังหวัด เจ้าอาวาส หรือเบอร์โทร">
+    <button id="temple-search-button" class="btn btn-outline-primary">ค้นหา</button>
+  </div>
+  <div id="temple-bulk-bar" class="alert alert-warning py-2 px-3 d-none mb-3 d-flex flex-wrap justify-content-between align-items-center gap-2 shadow-sm border-warning">
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+      <span>☑️ เลือกอยู่ <strong><span id="selected-temple-count-bar">0</span></strong> รายการ:</span>
+      <button id="btn-deselect-all-temples" type="button" class="btn btn-link btn-sm text-decoration-none p-0">ยกเลิกการเลือก</button>
+    </div>
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+      <span class="small fw-bold text-dark">เปลี่ยนสถานะ:</span>
+      <div class="btn-group btn-group-sm" role="group">
+        <button type="button" class="btn btn-success btn-bulk-temple-status" data-status="ACTIVE">✅ ใช้งาน (ACTIVE)</button>
+        <button type="button" class="btn btn-secondary btn-bulk-temple-status" data-status="INACTIVE">🔒 ปิดใช้งาน (INACTIVE)</button>
+      </div>
+      <div class="vr mx-1 d-none d-md-inline"></div>
+      <button id="btn-delete-selected-temples-bar" type="button" class="btn btn-outline-danger btn-sm">🗑️ ลบที่เลือก</button>
+    </div>
+  </div>
+  <div id="temple-table" class="table-wrap"></div>
+</section>
+<section id="disbursements-pane" class="admin-pane tab-pane d-none">
+  <!-- Sub-navigation Header -->
+  <div class="card bg-white border-0 shadow-sm p-3 mb-3 print-hidden" id="disb-header-card">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <div>
+        <h2 class="h5 mb-0 text-navy fw-bold">💰 ระบบจัดการการเบิกปัจจัยทอดกฐิน</h2>
+        <small class="text-muted">บริหารจัดการเบิกจ่ายปัจจัย ตรวจสอบสถานะการจ่ายเงิน และพิมพ์ใบเบิกปัจจัยพร้อมข้อปฏิบัติ</small>
+      </div>
+      <div class="d-flex flex-wrap gap-2" id="disb-nav-pills">
+        <button class="btn btn-outline-primary btn-sm active" data-subtab="dashboard">📊 แดชบอร์ดภาพรวม</button>
+        <button class="btn btn-outline-success btn-sm" data-subtab="katin100K">🌟 กฐินแสน (100K)</button>
+        <button class="btn btn-outline-info btn-sm" data-subtab="katin10K">🎆 กฐินหมื่น (10K)</button>
+        <button class="btn btn-warning btn-sm text-dark fw-bold" data-subtab="form">📝 กรอกข้อมูลเบิกจ่าย</button>
+        <button class="btn btn-outline-danger btn-sm" data-subtab="history">📜 ประวัติเอกสาร (<span id="disb-history-count">0</span>)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Subview Content Area -->
+  <div id="disb-subview-content"></div>
+</section>
+
+<section id="admins-pane" class="admin-pane tab-pane d-none">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <div>
+      <h2 class="h5 mb-0 text-navy fw-bold">👥 จัดการบัญชีผู้ดูแลระบบ (Admin Users)</h2>
+      <small class="text-muted">เพิ่มบัญชีเจ้าหน้าที่ กำหนดระดับสิทธิ์ และติดตามผู้แก้ไขข้อมูลในระบบ</small>
+    </div>
+    <div class="d-flex gap-2">
+      <button id="btn-refresh-admins" class="btn btn-outline-secondary btn-sm">🔄 รีเฟรช</button>
+      <button id="btn-add-admin" class="btn btn-primary btn-sm">+ เพิ่มผู้ดูแลใหม่</button>
+    </div>
+  </div>
+
+  <div class="alert alert-info py-2 small mb-3">
+    💡 <strong>ระบบผู้ดูแลหลายคน (Multi-Admin System):</strong>
+    เมื่อเจ้าหน้าที่แต่ละคนล็อกอินด้วยบัญชีของตนเอง การเปลี่ยนสถานะผู้สมัคร การแก้ไขข้อมูลวัด หรือการทำรายการต่าง ๆ ในระบบจะถูกบันทึก <strong>ชื่อผู้แก้ไข (Updated By)</strong> และ <strong>วันเวลา (Updated At)</strong> โดยอัตโนมัติ ช่วยให้ตรวจสอบย้อนหลังได้ชัดเจน 100%
+  </div>
+
+  <div class="card border-0 shadow-sm mb-3">
+    <div class="card-body p-2 d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <div class="d-flex align-items-center gap-2">
+        <span class="badge bg-primary-subtle text-primary fw-semibold" id="admin-users-count-badge">ผู้ดูแลทั้งหมด 0 คน</span>
+        <span class="badge bg-success-subtle text-success" id="admin-users-active-badge">ใช้งานอยู่ 0 คน</span>
+      </div>
+      <div class="input-group input-group-sm" style="max-width: 320px;">
+        <span class="input-group-text bg-white">🔎</span>
+        <input type="text" id="admin-user-search" class="form-control" placeholder="ค้นหาชื่อ, username หรือตำแหน่ง...">
+      </div>
+    </div>
+  </div>
+
+  <div id="admin-users-container" class="table-wrap"></div>
+</section>
+    </div> <!-- /.admin-content-area -->
+  </div> <!-- /.admin-container -->
+</section> <!-- /#admin-view -->
+</main>
+
+<div class="modal fade" id="editor-modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <form id="editor-form" class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title fs-5" id="modal-title">แก้ไขข้อมูล</h2>
+        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="ปิด"></button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer bg-white border-top">
+        <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">ยกเลิก</button>
+        <button class="btn btn-primary" type="submit">บันทึก</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Public List Visibility Configuration Modal -->
+<div class="modal fade" id="public-list-config-modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+    <div class="modal-content shadow">
+      <div class="modal-header bg-light">
+        <h2 class="modal-title fs-5 text-navy">🌐 ตั้งค่าการแสดงผลรายชื่อผู้ลงทะเบียนในหน้าสาธารณะ</h2>
+        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="ปิด"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="alert alert-info py-2 small mb-3">
+          💡 <strong>คำอธิบาย:</strong> กำหนดว่าต้องการให้รายชื่อผู้ลงทะเบียนของโครงการใด <strong>แสดงในหน้าสาธารณะ</strong> (<a href="register.html#public-list" target="_blank" class="alert-link">register.html#public-list</a>) ให้ประชาชนค้นหาและตรวจสอบสถานะได้<br>
+          <em>*หน้าสาธารณะจะแสดงเฉพาะ ชื่อ-นามสกุล วัด และรอบ/รุ่น โดยไม่เปิดเผยข้อมูลส่วนบุคคล (ไม่แสดงเบอร์โทรและเลขบัตรประชาชน)</em>
+        </div>
+        <div id="public-list-config-body"></div>
+      </div>
+      <div class="modal-footer bg-light">
+        <a href="register.html#public-list" target="_blank" class="btn btn-outline-primary btn-sm">👁️ เปิดดูหน้าสาธารณะจริง</a>
+        <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal">ปิดหน้าต่าง</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Temple Profile Modal (Dashboard Level: Temple Drilldown) -->
+<div class="modal fade" id="temple-profile-modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content shadow">
+      <div class="modal-header bg-light">
+        <div>
+          <span class="badge bg-primary mb-1">🏛️ TEMPLE PROFILE</span>
+          <h2 class="modal-title fs-5 text-navy fw-bold" id="temple-profile-name">ชื่อวัด</h2>
+          <small class="text-muted" id="temple-profile-location"></small>
+        </div>
+        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="ปิด"></button>
+      </div>
+      <div class="modal-body p-3 p-md-4">
+        <!-- Temple Master Details -->
+        <div class="card mb-3 border-secondary border-opacity-25 bg-light-subtle">
+          <div class="card-body p-3 small">
+            <div class="row g-2">
+              <div class="col-12 col-md-6"><strong>เจ้าอาวาส:</strong> <span id="temple-profile-abbot">-</span></div>
+              <div class="col-12 col-md-6"><strong>เบอร์ติดต่อ:</strong> <span id="temple-profile-phone">-</span></div>
+              <div class="col-12 col-md-6"><strong>รหัสวัด:</strong> <span class="font-monospace" id="temple-profile-id">-</span></div>
+              <div class="col-12 col-md-6"><strong>สถานะ:</strong> <span id="temple-profile-status">-</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project Breakdown for this temple -->
+        <h3 class="h6 fw-bold text-navy mb-2">📁 สรุปจำนวนผู้เข้าร่วมแยกตามโครงการ</h3>
+        <div class="table-responsive mb-3">
+          <table class="table table-sm table-bordered bg-white mb-0 small">
+            <thead class="table-light">
+              <tr>
+                <th>โครงการ</th>
+                <th style="width: 140px;" class="text-center">จำนวนผู้เข้าร่วม</th>
+                <th style="width: 160px;" class="text-center">รอบ / รุ่น ที่ลงทะเบียน</th>
+              </tr>
+            </thead>
+            <tbody id="temple-profile-project-breakdown"></tbody>
+            <tfoot class="table-light fw-bold">
+              <tr>
+                <td>รวมทุกโครงการ</td>
+                <td class="text-center text-primary" id="temple-profile-total-count">0 คน</td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <!-- Individual Roster from this temple -->
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h3 class="h6 fw-bold text-navy mb-0">👥 บุคคลที่ลงทะเบียนจากวัดนี้ (<span id="temple-profile-people-count">0</span> คน)</h3>
+          <small class="text-muted">คลิกที่แถวหรือชื่อเพื่อดู Person Profile</small>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-sm table-hover align-middle bg-white mb-0 small">
+            <thead class="table-light">
+              <tr>
+                <th>ชื่อ-นามสกุล / ฉายา</th>
+                <th>โครงการ</th>
+                <th>รุ่น</th>
+                <th>เบอร์โทร</th>
+                <th class="text-center" style="width: 90px;">โปรไฟล์</th>
+              </tr>
+            </thead>
+            <tbody id="temple-profile-people-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer bg-light d-flex justify-content-between">
+        <button type="button" class="btn btn-outline-primary btn-sm" id="temple-profile-edit-master-btn">✏️ จัดการข้อมูลวัดนี้ใน Master Data</button>
+        <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal">ปิด</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Person Profile Modal (Dashboard Level: Person Drilldown) -->
+<div class="modal fade" id="person-profile-modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content shadow">
+      <div class="modal-header bg-light">
+        <div>
+          <span class="badge bg-success mb-1">👤 PERSON PROFILE</span>
+          <h2 class="modal-title fs-5 text-navy fw-bold" id="person-profile-fullname">ชื่อ-นามสกุล</h2>
+          <small class="text-muted" id="person-profile-id-tag"></small>
+        </div>
+        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="ปิด"></button>
+      </div>
+      <div class="modal-body p-3 p-md-4">
+        <!-- Master Personal Information -->
+        <div class="card mb-4 border shadow-sm">
+          <div class="card-header bg-white py-2">
+            <strong class="text-navy small">ข้อมูลบุคคลปัจจุบัน (Current Profile)</strong>
+          </div>
+          <div class="card-body p-3 small">
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <span class="text-muted d-block">คำนำหน้า:</span>
+                <strong id="person-profile-prefix">-</strong>
+              </div>
+              <div class="col-12 col-md-6">
+                <span class="text-muted d-block">ฉายา (ถ้ามี):</span>
+                <strong id="person-profile-monastic">-</strong>
+              </div>
+              <div class="col-12 col-md-6">
+                <span class="text-muted d-block">เบอร์โทรศัพท์:</span>
+                <strong id="person-profile-mobile">-</strong>
+              </div>
+              <div class="col-12 col-md-6">
+                <span class="text-muted d-block">เลขบัตรประชาชน:</span>
+                <strong id="person-profile-national-id">-</strong>
+              </div>
+              <div class="col-12 col-md-6">
+                <span class="text-muted d-block">วันเกิด / อายุ:</span>
+                <strong id="person-profile-birth">-</strong>
+              </div>
+              <div class="col-12 col-md-6">
+                <span class="text-muted d-block">วันบวช / พรรษา:</span>
+                <strong id="person-profile-ordination">-</strong>
+              </div>
+              <div class="col-12 col-md-6">
+                <span class="text-muted d-block">วัดต้นสังกัด:</span>
+                <strong id="person-profile-temple">-</strong>
+              </div>
+              <div class="col-12 col-md-6">
+                <span class="text-muted d-block">สถานะในระบบ:</span>
+                <span id="person-profile-status">-</span>
+              </div>
+              <div class="col-12">
+                <span class="text-muted d-block">ที่อยู่:</span>
+                <span id="person-profile-address">-</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Participation Timeline -->
+        <h3 class="h6 fw-bold text-navy mb-2">📜 ประวัติการเข้าร่วมโครงการ (Participation History)</h3>
+        <div class="table-responsive">
+          <table class="table table-sm table-hover align-middle bg-white mb-0 small">
+            <thead class="table-light">
+              <tr>
+                <th>วันที่สมัคร</th>
+                <th>โครงการ</th>
+                <th>รอบ / รุ่น</th>
+                <th>สังกัดวัดที่ส่ง</th>
+                <th>สถานะ</th>
+              </tr>
+            </thead>
+            <tbody id="person-profile-history-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer bg-light d-flex justify-content-between">
+        <button type="button" class="btn btn-outline-primary btn-sm" id="person-profile-edit-master-btn">✏️ แก้ไขข้อมูลบุคคลในระบบ Master</button>
+        <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal">ปิด</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>

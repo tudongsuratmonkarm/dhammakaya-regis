@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102a43">
+  <title>ลงทะเบียน | ธุดงคสถานสุราษฎร์ธานี</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container d-flex align-items-center justify-content-between gap-3 py-3">
+      <a href="index.html" class="brand text-decoration-none"><span class="brand-mark">☸</span><span>ธุดงคสถานสุราษฎร์ธานี</span></a>
+      <nav aria-label="เมนูหลัก" class="d-flex gap-2">
+        <a class="nav-link" href="index.html">หน้าแรก</a>
+        <a class="nav-link fw-semibold" href="register.html">ลงทะเบียน</a>
+        <a class="nav-link" href="kathin.html">ข้อมูลกฐิน</a>
+        <a class="nav-link" href="admin.html">Admin</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container pb-5">
+    <section class="hero" aria-labelledby="page-title">
+      <p class="eyebrow">ระบบลงทะเบียน</p><h1 id="page-title">ระบบลงทะเบียนออนไลน์<br class="d-none d-md-block">ธุดงคสถานสุราษฎร์ธานี</h1>
+      <p>เลือกช่วงการอบรมและกรอกข้อมูลผู้เข้าร่วม</p>
+    </section>
+    <div id="alert-area" aria-live="polite"></div>
+    <div id="register" class="scroll-anchor"></div>
+    <section id="projects-section" aria-labelledby="projects-heading">
+      <div class="section-heading"><div><p class="eyebrow">ขั้นตอนที่ 1</p><h2 id="projects-heading">เลือกโครงการ</h2></div><button id="refresh-projects" class="btn btn-outline-secondary btn-sm">รีเฟรชข้อมูล</button></div>
+      <div id="project-cards" class="row g-3" aria-busy="true"></div>
+    </section>
+    <section id="sessions-section" class="d-none" aria-labelledby="session-heading">
+      <div class="section-heading"><div><p class="eyebrow">ขั้นตอนที่ 2</p><h2 id="session-heading">เลือกรอบ/รุ่น</h2><p id="selected-project-name" class="text-muted mb-0"></p></div><button id="back-to-projects" class="btn btn-outline-secondary btn-sm">กลับไปเลือกโครงการ</button></div>
+      <div id="session-cards" class="row g-3" aria-busy="true"></div>
+    </section>
+    <section id="registration-section" class="form-shell d-none mt-4" aria-labelledby="form-heading">
+      <div class="section-heading"><div><p class="eyebrow">ขั้นตอนที่ 2–4</p><h2 id="form-heading">ข้อมูลการลงทะเบียน</h2></div><button type="button" id="cancel-form" class="btn btn-outline-secondary">เปลี่ยนรุ่น</button></div>
+      <form id="registration-form" novalidate>
+        <input type="hidden" id="session-id" name="sessionId">
+        <section class="form-section" id="temple-info-section">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <h3 class="mb-0">ข้อมูลวัด</h3>
+            <span id="temple-required-badge" class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle small d-none">
+              ไม่บังคับระบุวัด (ลงนามธุดงคสถานฯ)
+            </span>
+          </div>
+          <div class="position-relative">
+            <label for="temple-name" class="form-label" id="temple-name-label">
+              ค้นหาหรือกรอกชื่อวัด <span class="required" id="temple-name-required">*</span>
+            </label>
+            <input id="temple-name" name="templeName" class="form-control form-control-lg" autocomplete="off" required>
+            <div id="temple-suggestions" class="suggestions d-none" role="listbox"></div>
+          </div>
+          <p id="temple-source" class="form-text">พิมพ์ชื่อวัดใหม่ได้ หากไม่พบในฐานข้อมูล</p>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label for="subdistrict" class="form-label">ตำบล <span class="required" id="subdistrict-required">*</span></label>
+              <input id="subdistrict" name="subdistrict" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+              <label for="district" class="form-label">อำเภอ <span class="required" id="district-required">*</span></label>
+              <input id="district" name="district" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+              <label for="province" class="form-label">จังหวัด <span class="required" id="province-required">*</span></label>
+              <input id="province" name="province" class="form-control" required>
+            </div>
+          </div>
+        </section>
+        <section class="form-section">
+          <div class="d-flex justify-content-between align-items-center gap-2">
+            <h3 class="mb-0">ผู้เข้าร่วม</h3>
+            <button type="button" id="add-participant" class="btn btn-gold">+ เพิ่มผู้เข้าร่วม</button>
+          </div>
+          <div id="participants" class="mt-3"></div>
+          
+          <div class="mt-4 pt-1 mb-2">
+            <button type="button" id="add-participant-bottom" class="btn btn-add-participant-bottom w-100 d-flex align-items-center justify-content-center gap-2 shadow-sm">
+              <span class="fs-4 lh-1">➕</span>
+              <span>เพิ่มผู้เข้าร่วม (คนที่ <span id="next-participant-num">2</span>)</span>
+            </button>
+            <div class="text-center text-muted small mt-1">คลิกเพื่อเพิ่มข้อมูลผู้เข้าร่วมลำดับถัดไปสำหรับวัดนี้</div>
+          </div>
+        </section>
+        <div class="d-grid d-md-flex justify-content-md-end"><button class="btn btn-primary btn-lg px-5" type="submit">ตรวจสอบข้อมูลก่อนยืนยัน</button></div>
+      </form>
+    </section>
+    <section id="summary-section" class="form-shell d-none mt-4" aria-labelledby="summary-heading"><p class="eyebrow">ขั้นตอนที่ 4</p><h2 id="summary-heading">ตรวจสอบข้อมูล</h2><div id="summary-content"></div><div class="d-flex flex-column flex-md-row justify-content-end gap-2 mt-4"><button id="summary-back" class="btn btn-outline-secondary">ย้อนกลับไปแก้ไข</button><button id="confirm-registration" class="btn btn-primary btn-lg">ยืนยันการลงทะเบียน</button></div></section>
+    <section id="success-section" class="form-shell success-shell d-none mt-4" aria-live="polite"></section>
+    <section id="public-list" class="mt-5" aria-labelledby="list-heading">
+      <div class="section-heading"><div><p class="eyebrow">ข้อมูลสาธารณะ</p><h2 id="list-heading">รายชื่อผู้ลงทะเบียน</h2></div></div>
+      <p class="text-muted">แสดงเฉพาะชื่อ วัด และรุ่นอบรม โดยไม่เปิดเผยข้อมูลส่วนบุคคล</p>
+      <div class="row g-2 mb-3">
+        <div class="col-md-5">
+          <label for="public-project-filter" class="form-label small fw-bold text-muted mb-1">เลือกโครงการ:</label>
+          <select id="public-project-filter" class="form-select"></select>
+        </div>
+        <div class="col-md-7 d-flex align-items-end">
+          <div class="input-group w-100">
+            <input id="public-search" class="form-control" placeholder="ค้นหาชื่อ นามสกุล ชื่อวัด หรือรุ่น">
+            <button id="public-search-button" class="btn btn-outline-primary">ค้นหา</button>
+          </div>
+        </div>
+      </div>
+      <div id="public-results" class="public-results"></div>
+      <nav id="public-pagination" aria-label="หน้ารายชื่อ"></nav>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="container">แพลตฟอร์มจัดการข้อมูลและโครงการ ธุดงคสถานสุราษฎร์ธานี</div></footer>
+  <template id="participant-template">
+    <article class="participant-card">
+      <input type="hidden" class="person-id" value="">
+      <input type="hidden" class="use-existing-mobile" value="false">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <h4 class="participant-title mb-0">ผู้เข้าร่วมคนที่</h4>
+        <button type="button" class="btn btn-sm btn-outline-danger remove-participant">ลบผู้เข้าร่วม</button>
+      </div>
+
+      <!-- Person Lookup Box (Autocomplete) -->
+      <!-- Person Lookup Box (Autocomplete) -->
+      <div class="person-lookup-box">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-primary text-white px-2 py-1 shadow-sm person-lookup-badge-pulse" style="font-size: 0.85rem;">
+              ⚡ เคยลงทะเบียนแล้ว?
+            </span>
+            <span class="fw-bold text-primary" style="font-size: 1.05rem;">
+              ค้นหาบุคคลเดิมในระบบ
+            </span>
+          </div>
+          <span class="badge bg-warning text-dark border border-warning-subtle shadow-sm px-2 py-1" style="font-size: 0.8rem;">
+            ✨ เติมข้อมูลอัตโนมัติ ไม่ต้องกรอกใหม่
+          </span>
+        </div>
+        <p class="text-secondary small mb-2 lh-sm">
+          💡 สำหรับผู้ที่เคยลงทะเบียนในโครงการก่อนหน้า เพียงพิมพ์ <strong>ชื่อ-นามสกุล</strong> หรือ <strong>เบอร์โทรศัพท์</strong> ระบบจะดึงข้อมูลเดิมมาใส่ให้ทันที
+        </p>
+        <div class="position-relative">
+          <div class="input-group input-group-lg shadow-sm">
+            <span class="input-group-text bg-white border-primary border-opacity-50 text-primary">
+              <span class="fs-5">🔍</span>
+            </span>
+            <input type="text" class="form-control person-search-input bg-white" placeholder="พิมพ์ชื่อ-นามสกุล หรือ เบอร์โทร เพื่อค้นหา (2 ตัวขึ้นไป)..." autocomplete="off" style="font-size: 1rem;">
+          </div>
+          <div class="person-suggestions suggestions d-none position-absolute w-100 shadow-lg rounded-3 border bg-white mt-1" style="z-index: 1050; max-height: 250px; overflow-y: auto;"></div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-1">
+          <small class="text-muted" style="font-size: 0.78rem;">
+            * หากเป็นผู้เข้าร่วมใหม่ (ไม่เคยลงทะเบียน) ให้ข้ามช่องนี้แล้วกรอกข้อมูลด้านล่างได้ทันที
+          </small>
+        </div>
+        <div class="person-match-badge d-none mt-2 p-2 bg-success bg-opacity-10 border border-success border-opacity-25 rounded d-flex flex-wrap justify-content-between align-items-center gap-2">
+          <div>
+            <span class="badge bg-success me-1">✓ พบข้อมูลเดิม</span>
+            <strong class="matched-person-name text-success"></strong>
+            <small class="text-muted ms-1 matched-person-meta"></small>
+          </div>
+          <div class="d-flex gap-1">
+            <button type="button" class="btn btn-sm btn-outline-secondary btn-clear-match">ยกเลิก / กรอกใหม่</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-sm-4">
+          <label class="form-label">คำนำหน้า <span class="required">*</span></label>
+          <select class="form-select prefix" required>
+            <option value="">เลือกคำนำหน้า</option>
+            <option>พระ</option>
+            <option>นาย</option>
+            <option>นาง</option>
+            <option>นางสาว</option>
+            <option>เด็กชาย</option>
+            <option>เด็กหญิง</option>
+            <option>อื่น ๆ</option>
+          </select>
+        </div>
+        <div class="col-sm-4 conditional monastic-wrap d-none">
+          <label class="form-label">ฉายา</label>
+          <input class="form-control monastic-name" placeholder="ฉายา (ถ้ามี)">
+        </div>
+        <div class="col-sm-4 conditional other-prefix-wrap d-none">
+          <label class="form-label">โปรดระบุคำนำหน้า <span class="required">*</span></label>
+          <input class="form-control other-prefix" placeholder="เช่น ดร., พ.ต.อ.">
+        </div>
+        <div class="col-sm-4">
+          <label class="form-label">ชื่อ <span class="required">*</span></label>
+          <input class="form-control first-name" required>
+        </div>
+        <div class="col-sm-4">
+          <label class="form-label">นามสกุล <span class="required">*</span></label>
+          <input class="form-control last-name" required>
+        </div>
+        
+        <!-- Mobile with Privacy Rules -->
+        <div class="col-sm-4 mobile-container">
+          <label class="form-label">เบอร์มือถือ <span class="required">*</span></label>
+          <div class="existing-mobile-wrap d-none">
+            <div class="alert alert-info py-2 px-2 mb-0 small d-flex align-items-center justify-content-between">
+              <div>
+                <span class="badge bg-primary me-1">ข้อมูลเดิม</span>
+                <span>📱 <span class="existing-mobile-label">มีเบอร์เดิมอยู่แล้ว</span></span>
+              </div>
+              <button type="button" class="btn btn-sm btn-outline-primary btn-change-mobile ms-2">เปลี่ยนเบอร์</button>
+            </div>
+          </div>
+          <div class="input-mobile-wrap">
+            <input class="form-control mobile" inputmode="numeric" maxlength="10" placeholder="เบอร์โทร 10 หลัก" required>
+            <div class="mobile-feedback small mt-1 d-none"></div>
+            <div class="d-none revert-mobile-wrap mt-1">
+              <button type="button" class="btn btn-sm btn-link p-0 text-decoration-none btn-use-existing-mobile">← ใช้เบอร์เดิม</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-4 national-id-container">
+          <label class="form-label">เลขบัตรประชาชน</label>
+          <input class="form-control national-id" inputmode="numeric" maxlength="13" placeholder="13 หลัก (ไม่บังคับ)">
+          <div class="national-id-feedback small mt-1 d-none"></div>
+          <div class="existing-nid-wrap d-none mt-1">
+            <small class="text-success fw-semibold">🔒 <span class="existing-nid-label">มีเลขบัตรเดิมในระบบแล้ว</span></small>
+          </div>
+        </div>
+
+        <div class="col-sm-4">
+          <label class="form-label">วันเกิด (พ.ศ.)</label>
+          <input type="text" class="form-control birth-date" inputmode="numeric" maxlength="10" placeholder="วว/มม/ปปปป" autocomplete="off">
+        </div>
+        <div class="col-sm-4">
+          <label class="form-label">อายุ (ปี)</label>
+          <input class="form-control age" readonly aria-label="อายุที่คำนวณอัตโนมัติ" placeholder="คำนวณอัตโนมัติ">
+        </div>
+        <div class="col-sm-4 conditional ordination-date-wrap d-none">
+          <label class="form-label">วันบวช (พ.ศ.)</label>
+          <input type="text" class="form-control ordination-date" inputmode="numeric" maxlength="10" placeholder="วว/มม/ปปปป" autocomplete="off">
+        </div>
+        <div class="col-sm-4 conditional phansa-wrap d-none">
+          <label class="form-label">พรรษา</label>
+          <input class="form-control phansa" readonly aria-label="พรรษาที่คำนวณอัตโนมัติ" placeholder="คำนวณอัตโนมัติ">
+        </div>
+      </div>
+    </article>
+  </template>
+  <script type="module" src="js/app.js"></script>
+</body></html>
