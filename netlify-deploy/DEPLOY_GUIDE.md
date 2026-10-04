@@ -87,7 +87,7 @@ netlify-deploy/
 | `GOOGLE_SHEET_ID` | ID ของ Google Sheets ฐานข้อมูล | `1A2B3C...` |
 | `GOOGLE_CLIENT_EMAIL` | อีเมล Service Account ของ Google Cloud | `xxx@project.iam.gserviceaccount.com` |
 | `GOOGLE_PRIVATE_KEY` | Private Key ของ Service Account | `-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----` |
-| `ADMIN_USERNAME` | ชื่อผู้ใช้ Master Admin | `tudongsuratmonkarm` |
-| `ADMIN_PASSWORD` | รหัสผ่าน Master Admin | `monkarm` (หรือรหัสที่ต้องการ) |
+| `ADMIN_USERNAME` | ชื่อผู้ใช้ Master Admin | `admin` |
+| `ADMIN_PASSWORD` | รหัสผ่าน Master Admin | `password` (หรือรหัสที่ต้องการ) |
 | `SESSION_SECRET` | คีย์ลับสำหรับเข้ารหัส Session Token | ข้อความสุ่มยาวๆ เช่น `surat_secure_session_key_2569` |
 | `DRIVE_FOLDER_ID` | (ไม่บังคับ) ID โฟลเดอร์ Google Drive สำหรับเซฟรูป | `1XYZ...` |
